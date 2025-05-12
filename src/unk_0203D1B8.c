@@ -1462,18 +1462,18 @@ void sub_0203E274(FieldSystem *fieldSystem, UnkStruct_0203E274 *param1)
     FieldSystem_StartChildProcess(fieldSystem, &v0, param1);
 }
 
-void sub_0203E284(FieldSystem *fieldSystem, UnkStruct_020997B8 *param1)
+void sub_0203E284(FieldSystem *fieldSystem, MoveReminderData *data)
 {
     FS_EXTERN_OVERLAY(overlay91);
 
-    const OverlayManagerTemplate v0 = {
-        ov91_021D0D80,
-        ov91_021D0E08,
-        ov91_021D0EBC,
+    const OverlayManagerTemplate overlayTemplate = {
+        MoveReminder_Init,
+        MoveReminder_Main,
+        MoveReminder_Exit,
         FS_OVERLAY_ID(overlay91)
     };
 
-    FieldSystem_StartChildProcess(fieldSystem, &v0, param1);
+    FieldSystem_StartChildProcess(fieldSystem, &overlayTemplate, data);
 }
 
 void sub_0203E2AC(FieldSystem *fieldSystem, void *param1)

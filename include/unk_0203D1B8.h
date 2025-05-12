@@ -78,7 +78,7 @@ void sub_0203E224(FieldSystem *fieldSystem);
 void sub_0203E234(FieldSystem *fieldSystem, UnkStruct_0203E234 *param1);
 void *sub_0203E244(FieldSystem *fieldSystem);
 void sub_0203E274(FieldSystem *fieldSystem, UnkStruct_0203E274 *param1);
-void sub_0203E284(FieldSystem *fieldSystem, UnkStruct_020997B8 *param1);
+void sub_0203E284(FieldSystem *fieldSystem, MoveReminderData *data);
 void sub_0203E2AC(FieldSystem *fieldSystem, void *param1);
 void sub_0203E2D4(FieldSystem *fieldSystem, void *param1);
 void sub_0203E2FC(FieldSystem *fieldSystem);

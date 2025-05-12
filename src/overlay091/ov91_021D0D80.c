@@ -3,10 +3,13 @@
 #include <nitro.h>
 #include <string.h>
 
-#include "struct_defs/struct_020997B8.h"
+#include "constants/field/window.h"
+#include "constants/heap.h"
+
 #include "struct_defs/struct_02099F80.h"
 
 #include "applications/pokemon_summary_screen/main.h"
+#include "overlay007/shop_menu.h"
 
 #include "bg_window.h"
 #include "font.h"
@@ -37,399 +40,565 @@
 #include "unk_02094EDC.h"
 #include "vram_transfer.h"
 
+#include "constants/moves.h"
+#include "constants/narc.h"
+#include "generated/sdat.h"
+#include "generated/text_banks.h"
+#include "res/text/bank/unk_0645.h"
 #include "constdata/const_020F410C.h"
 
-typedef struct {
-    UnkStruct_020997B8 *unk_00;
-    BgConfig *unk_04;
-    Window unk_08[15];
-    MessageLoader *unk_F8;
-    StringTemplate *unk_FC;
-    Strbuf *unk_100;
-    ListMenu *unk_104;
-    StringList *unk_108;
-    Menu *unk_10C;
-    SpriteSystem *unk_110;
-    SpriteManager *unk_114;
-    ManagedSprite *unk_118[13];
-    PokemonSummary unk_14C;
-    OverlayManager *unk_17C;
-    int unk_180;
-    u8 unk_184;
-    u8 unk_185;
-    u8 unk_186;
-} UnkStruct_ov91_021D0ED8;
-
-typedef int (*GenericFunctionPtr_1)(UnkStruct_ov91_021D0ED8 *);
-
-typedef struct {
-    GenericFunctionPtr_1 unk_00;
-    GenericFunctionPtr_1 unk_04;
-} GameWindowLayout_1;
-
-static void ov91_021D0ED8(UnkStruct_ov91_021D0ED8 *param0);
-static void ov91_021D0F6C(UnkStruct_ov91_021D0ED8 *param0);
-static void ov91_021D0F9C(void *param0);
-static void ov91_021D0FC4(void);
-static void ov91_021D0FE4(BgConfig *param0);
-static void ov91_021D1098(BgConfig *param0);
-static void ov91_021D10C8(UnkStruct_ov91_021D0ED8 *param0, NARC *param1);
-static void ov91_021D1154(UnkStruct_ov91_021D0ED8 *param0);
-static void ov91_021D11A0(UnkStruct_ov91_021D0ED8 *param0);
-static void ov91_021D11B8(UnkStruct_ov91_021D0ED8 *param0);
-static void ov91_021D11F0(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D1214(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D122C(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D1480(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D134C(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D136C(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D1394(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D13E4(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D1438(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D1450(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D2604(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D261C(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D26AC(UnkStruct_ov91_021D0ED8 *param0);
-static void ov91_021D1580(UnkStruct_ov91_021D0ED8 *param0, u32 param1, u32 param2, TextColor param3, u32 param4);
-static void ov91_021D1498(UnkStruct_ov91_021D0ED8 *param0);
-static void ov91_021D1664(UnkStruct_ov91_021D0ED8 *param0);
-static void ov91_021D1784(UnkStruct_ov91_021D0ED8 *param0);
-static void ov91_021D1868(UnkStruct_ov91_021D0ED8 *param0);
-static void ov91_021D188C(ListMenu *param0, u32 param1, u8 param2);
-static void ov91_021D18C4(ListMenu *param0, u32 param1, u8 param2);
-static void ov91_021D18C8(UnkStruct_ov91_021D0ED8 *param0, u32 param1);
-static void ov91_021D1A68(UnkStruct_ov91_021D0ED8 *param0, u32 param1);
-static void ov91_021D1BBC(UnkStruct_ov91_021D0ED8 *param0, u16 param1);
-static void ov91_021D1C10(UnkStruct_ov91_021D0ED8 *param0, u32 param1);
-static void ov91_021D1DF8(UnkStruct_ov91_021D0ED8 *param0, u32 param1);
-static BOOL ov91_021D1E50(TextPrinterTemplate *param0, u16 param1);
-static u16 ov91_021D1DD0(UnkStruct_ov91_021D0ED8 *param0);
-static u16 ov91_021D1DE0(UnkStruct_ov91_021D0ED8 *param0);
-static u8 ov91_021D1EA0(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D1EC8(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D1EE8(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D1F38(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D1F44(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D1F94(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D1FA0(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D1FBC(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D1FD8(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D1FF4(UnkStruct_ov91_021D0ED8 *param0);
-static int ov91_021D2008(UnkStruct_ov91_021D0ED8 *param0);
-static void ov91_021D2508(UnkStruct_ov91_021D0ED8 *param0, NARC *param1);
-static void ov91_021D20B4(UnkStruct_ov91_021D0ED8 *param0);
-static void ov91_021D20E8(UnkStruct_ov91_021D0ED8 *param0);
-static void ov91_021D2314(UnkStruct_ov91_021D0ED8 *param0);
-static void ov91_021D237C(UnkStruct_ov91_021D0ED8 *param0, u16 param1, u16 param2);
-static void ov91_021D24B4(UnkStruct_ov91_021D0ED8 *param0, u16 param1);
-static void ov91_021D2548(UnkStruct_ov91_021D0ED8 *param0, u8 param1, u8 param2);
-static void ov91_021D2574(UnkStruct_ov91_021D0ED8 *param0, u8 param1);
-static void ov91_021D2594(UnkStruct_ov91_021D0ED8 *param0);
-static void ov91_021D25E4(UnkStruct_ov91_021D0ED8 *param0);
-
-static const WindowTemplate Unk_ov91_021D2884[] = {
-    { 0x1, 0x13, 0x0, 0xB, 0x2, 0xF, 0x28 },
-    { 0x1, 0x13, 0x0, 0xB, 0x2, 0xF, 0x3E },
-    { 0x1, 0x1, 0x0, 0x6, 0x2, 0xF, 0x54 },
-    { 0x1, 0x1, 0x2, 0x6, 0x2, 0xF, 0x60 },
-    { 0x1, 0x1, 0x4, 0x8, 0x2, 0xF, 0x6C },
-    { 0x1, 0x1, 0x6, 0x3, 0x2, 0xF, 0x7C },
-    { 0x1, 0x2, 0x2, 0xC, 0x2, 0xF, 0x82 },
-    { 0x1, 0xD, 0x2, 0x3, 0x2, 0xF, 0x9A },
-    { 0x1, 0xD, 0x4, 0x3, 0x2, 0xF, 0xA0 },
-    { 0x1, 0xB, 0x6, 0x5, 0x2, 0xF, 0xA6 },
-    { 0x1, 0x1, 0x8, 0xF, 0xA, 0xF, 0xB0 },
-    { 0x1, 0x1, 0x9, 0xF, 0x6, 0xF, 0x146 },
-    { 0x0, 0x2, 0x13, 0x1B, 0x4, 0xE, 0x1A0 },
-    { 0x1, 0x15, 0x3, 0xB, 0xE, 0xF, 0x20C },
-    { 0x0, 0x17, 0xD, 0x7, 0x4, 0xE, 0x2A6 }
+enum XAlignmentModes {
+    ALIGN_MODE_LEFT = 0,
+    ALIGN_MODE_RIGHT,
+    ALIGN_MODE_CENTER
 };
 
-static const ListMenuTemplate Unk_ov91_021D27BC = {
-    NULL,
-    ov91_021D188C,
-    ov91_021D18C4,
-    NULL,
-    0x0,
-    0x7,
-    0x0,
-    0x2,
-    0x0,
-    0x0,
-    0x1,
-    0x0,
-    0x2,
-    0x0,
-    0x10,
-    0x0,
-    0x0,
-    0x1,
-    NULL
+enum FormatStrings {
+    FMTSTR_TEACH_WHICH_MOVE = 0,
+    FMTSTR_TEACH_THE_MOVE,
+    FMTSTR_GIVE_UP_TEACHING_MOVE,
+    FMTSTR_MON_LEARNED_MOVE,
+    FMTSTR_MON_TRYING_TO_LEARN_MOVE,
+    FMTSTR_MON_FORGOT_MOVE,
+    FMTSTR_MON_LEARNED_MOVE2, // succession after FMTSTR_MON_FORGOT_MOVE
+    FMTSTR_MON_STOP_TEACHING_MOVE,
+    FMTSTR_MON_DID_NOT_LEARN_MOVE,
+    FMTSTR_PLAYER_HANDED_OVER_ITEM,
+    FMTSTR_MAKE_MON_FORGOT_MOVE
 };
 
-static const u32 Unk_ov91_021D282C[2][11] = {
-    { 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xA },
-    { 0xB, 0xC, 0xD, 0xE, 0xF, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15 }
+static void MoveReminder_LoadGraphics(MoveReminder *reminder);
+static void MoveReminder_Free(MoveReminder *reminder);
+static void MoveReminder_VBlank(void *data);
+static void MoveReminder_SetGXLayersBanks(void);
+static void MoveReminder_SetBGLayers(BgConfig *bgConfig);
+static void MoveReminder_FreeBgConfig(BgConfig *bgConfig);
+static void MoveReminder_LoadGraphicsFromNARC(MoveReminder *reminder, NARC *narc);
+static void MoveReminder_LoadWindows(MoveReminder *reminder);
+static void MoveReminder_FreeWindows(MoveReminder *reminder);
+static void MoveReminder_LoadStrings(MoveReminder *reminder);
+static void MoveReminder_FreeStrings(MoveReminder *reminder);
+static int MoveReminder_WaitScreenTransition(MoveReminder *reminder);
+static int MoveReminder_Select(MoveReminder *reminder);
+static int MoveReminder_ScreenTransitionOut(MoveReminder *reminder);
+static int MoveReminder_HasTextPrinterFinished(MoveReminder *reminder);
+static int MoveReminder_MakeYesNoChoice(MoveReminder *reminder);
+static int MoveReminder_SelectYesNo(MoveReminder *reminder);
+static int MoveReminder_SetMoveSlotToSelectedMove(MoveReminder *reminder);
+static int MoveReminder_PrintMonLearnedMove2(MoveReminder *reminder);
+static int MoveReminder_PrintForgotOrStopTeachingMove(MoveReminder *reminder);
+static int MoveReminder_ScreenTransitionIn(MoveReminder *reminder);
+static int MoveReminder_OpenSummaryScreenApp(MoveReminder *reminder);
+static int MoveReminder_ReloadApp(MoveReminder *reminder);
+static void MoveReminder_PrintStrbuf(MoveReminder *reminder, u32 windowID, u32 fontID, TextColor color, enum XAlignmentModes xAlignMode);
+static void MoveReminder_LoadSelectedMoveInfo(MoveReminder *reminder);
+static void MoveReminder_PrintStaticInfo(MoveReminder *reminder);
+static void MoveReminder_InitListMenu(MoveReminder *reminder);
+static void MoveReminder_FreeListMenu(MoveReminder *reminder);
+static void MoveReminder_MenuCursorCallback(ListMenu *listMenu, u32 index, u8 onInit);
+static void MoveReminder_MenuPrintCallback(ListMenu *listMenu, u32 index, u8 yOffset);
+static void MoveReminder_PrintBattleInfo(MoveReminder *reminder, u32 index);
+static void MoveReminder_PrintContestInfo(MoveReminder *reminder, u32 index);
+static void MoveReminder_PrintContestHeartsInfo(MoveReminder *reminder, u16 index);
+static void MoveReminder_FormatStrbuf(MoveReminder *reminder, enum FormatStrings fmt);
+static void MoveReminder_FormatAndPrintStrbuf(MoveReminder *reminder, enum FormatStrings fmt);
+static BOOL MoveReminder_TextPrinterCallback(TextPrinterTemplate *template, u16 param);
+static u16 MoveReminder_SelectedMove(MoveReminder *reminder);
+static u16 MoveReminder_MoveIndex(MoveReminder *reminder);
+static u8 MoveReminder_CalculateTotalMoves(MoveReminder *reminder);
+static int MoveReminder_PrintMonLearnedMove(MoveReminder *reminder); // TODO:
+static int ov91_021D1EE8(MoveReminder *reminder);
+static int ov91_021D1F38(MoveReminder *reminder);
+static int ov91_021D1F44(MoveReminder *reminder);
+static int ov91_021D1F94(MoveReminder *reminder);
+static int ov91_021D1FA0(MoveReminder *reminder);
+static int ov91_021D1FBC(MoveReminder *reminder);
+static int ov91_021D1FD8(MoveReminder *reminder);
+static int ov91_021D1FF4(MoveReminder *reminder);
+static int ov91_021D2008(MoveReminder *reminder);
+static void MoveReminder_LoadSprites(MoveReminder *reminder, NARC *narc);
+static void MoveReminder_FreeSprites(MoveReminder *reminder);
+static void MoveReminder_UpdateSpritesAnim(MoveReminder *reminder);
+static void MoveReminder_UpdateTypeSprites(MoveReminder *reminder);
+static void MoveReminder_MoveTypeSprites(MoveReminder *reminder, u16 prevPos, u16 currPos);
+static void MoveReminder_UpdateClassSprite(MoveReminder *reminder, u16 move);
+static void MoveReminder_UpdateCursor(MoveReminder *reminder, u8 index, u8 palette);
+static void ov91_021D2574(MoveReminder *reminder, u8 draw);
+static void ov91_021D2594(MoveReminder *reminder);
+static void ov91_021D25E4(MoveReminder *reminder);
+
+static const WindowTemplate sMoveReminder_WindowTemplates[] = {
+    [MOVE_REMINDER_WINDOW_0] =
+    {
+        .bgLayer = BG_LAYER_MAIN_1,
+        .tilemapLeft = 19,
+        .tilemapTop = 0,
+        .width = 11,
+        .height = 2,
+        .palette = 15,
+        .baseTile = 0x28
+    },
+    [MOVE_REMINDER_WINDOW_1] =
+    {
+        .bgLayer = BG_LAYER_MAIN_1,
+        .tilemapLeft = 19,
+        .tilemapTop = 0,
+        .width = 11,
+        .height = 2,
+        .palette = 15,
+        .baseTile = 0x3E
+    },
+    [MOVE_REMINDER_WINDOW_2] =
+    {
+        .bgLayer = BG_LAYER_MAIN_1,
+        .tilemapLeft = 1,
+        .tilemapTop = 0,
+        .width = 6,
+        .height = 2,
+        .palette = 15,
+        .baseTile = 0x54
+    },
+    [MOVE_REMINDER_WINDOW_3] =
+    {
+        .bgLayer = BG_LAYER_MAIN_1,
+        .tilemapLeft = 1,
+        .tilemapTop = 2,
+        .width = 6,
+        .height = 2,
+        .palette = 15,
+        .baseTile = 0x60
+    },
+    [MOVE_REMINDER_WINDOW_4] =
+    {
+        .bgLayer = BG_LAYER_MAIN_1,
+        .tilemapLeft = 1,
+        .tilemapTop = 4,
+        .width = 8,
+        .height = 2,
+        .palette = 15,
+        .baseTile = 0x6C
+    },
+    [MOVE_REMINDER_WINDOW_5] =
+    {
+        .bgLayer = BG_LAYER_MAIN_1,
+        .tilemapLeft = 1,
+        .tilemapTop = 6,
+        .width = 3,
+        .height = 2,
+        .palette = 15,
+        .baseTile = 0x7C
+    },
+    [MOVE_REMINDER_WINDOW_6] =
+    {
+        .bgLayer = BG_LAYER_MAIN_1,
+        .tilemapLeft = 2,
+        .tilemapTop = 2,
+        .width = 12,
+        .height = 2,
+        .palette = 15,
+        .baseTile = 0x82
+    },
+    [MOVE_REMINDER_WINDOW_7] =
+    {
+        .bgLayer = BG_LAYER_MAIN_1,
+        .tilemapLeft = 13,
+        .tilemapTop = 2,
+        .width = 3,
+        .height = 2,
+        .palette = 15,
+        .baseTile = 0x9A
+    },
+    [MOVE_REMINDER_WINDOW_8] =
+    {
+        .bgLayer = BG_LAYER_MAIN_1,
+        .tilemapLeft = 13,
+        .tilemapTop = 4,
+        .width = 3,
+        .height = 2,
+        .palette = 15,
+        .baseTile = 0xA0
+    },
+    [MOVE_REMINDER_WINDOW_9] =
+    {
+        .bgLayer = BG_LAYER_MAIN_1,
+        .tilemapLeft = 11,
+        .tilemapTop = 6,
+        .width = 5,
+        .height = 2,
+        .palette = 15,
+        .baseTile = 0xA6
+    },
+    [MOVE_REMINDER_WINDOW_10] =
+    {
+        .bgLayer = BG_LAYER_MAIN_1,
+        .tilemapLeft = 1,
+        .tilemapTop = 8,
+        .width = 15,
+        .height = 10,
+        .palette = 15,
+        .baseTile = 0xB0
+    },
+    [MOVE_REMINDER_WINDOW_11] =
+    {
+        .bgLayer = BG_LAYER_MAIN_1,
+        .tilemapLeft = 1,
+        .tilemapTop = 9,
+        .width = 15,
+        .height = 6,
+        .palette = 15,
+        .baseTile = 0x146
+    },
+    [MOVE_REMINDER_WINDOW_12] =
+    {
+        .bgLayer = BG_LAYER_MAIN_0,
+        .tilemapLeft = 2,
+        .tilemapTop = 19,
+        .width = 27,
+        .height = 4,
+        .palette = 14,
+        .baseTile = 0x1A0
+    },
+    [MOVE_REMINDER_WINDOW_13] =
+    {
+        .bgLayer = BG_LAYER_MAIN_1,
+        .tilemapLeft = 21,
+        .tilemapTop = 3,
+        .width = 11,
+        .height = 14,
+        .palette = 15,
+        .baseTile = 0x20C
+    },
+    [MOVE_REMINDER_WINDOW_14] =
+    {
+        .bgLayer = BG_LAYER_MAIN_0,
+        .tilemapLeft = 23,
+        .tilemapTop = 13,
+        .width = 7,
+        .height = 4,
+        .palette = 14,
+        .baseTile = 0x2A6
+    }
+};
+
+static const ListMenuTemplate sMoveReminder_ListMenuTemplate = {
+    .choices = NULL,
+    .cursorCallback = MoveReminder_MenuCursorCallback,
+    .printCallback = MoveReminder_MenuPrintCallback,
+    .window = NULL,
+    .count = 0,
+    .maxDisplay = MAX_ITEM_SHOWN,
+    .headerXOffset = 0,
+    .textXOffset = 2,
+    .cursorXOffset = 0,
+    .yOffset = 0,
+    .textColorFg = 1,
+    .textColorBg = 0,
+    .textColorShadow = 2,
+    .letterSpacing = 0,
+    .lineSpacing = 0,
+    .pagerMode = PAGER_MODE_NONE,
+    .fontID = FONT_SYSTEM,
+    .cursorType = 1,
+    .parent = NULL
+};
+
+static const u32 sMoveReminder_BankEntryIDs[2][11] = {
+    {
+        pl_msg_00000645_00000,
+        pl_msg_00000645_00001,
+        pl_msg_00000645_00002,
+        pl_msg_00000645_00003,
+        pl_msg_00000645_00004,
+        pl_msg_00000645_00005,
+        pl_msg_00000645_00006,
+        pl_msg_00000645_00007,
+        pl_msg_00000645_00008,
+        pl_msg_00000645_00009,
+        pl_msg_00000645_00010
+    },
+    {
+        pl_msg_00000645_00011,
+        pl_msg_00000645_00012,
+        pl_msg_00000645_00013,
+        pl_msg_00000645_00014,
+        pl_msg_00000645_00015,
+        pl_msg_00000645_00016,
+        pl_msg_00000645_00017,
+        pl_msg_00000645_00018,
+        pl_msg_00000645_00019,
+        pl_msg_00000645_00020,
+        pl_msg_00000645_00021
+    }
 };
 
 static const GameWindowLayout_1 Unk_ov91_021D27DC[] = {
-    { ov91_021D1EC8, ov91_021D1EE8 },
+    { MoveReminder_PrintMonLearnedMove, ov91_021D1EE8 },
     { ov91_021D1F38, ov91_021D1F44 },
     { ov91_021D1F94, ov91_021D1FA0 },
     { ov91_021D1FBC, ov91_021D1FD8 },
     { ov91_021D1FF4, ov91_021D2008 }
 };
 
-static const SpriteTemplate Unk_ov91_021D28FC[] = {
+static const SpriteTemplate sMoveReminder_SpriteTemplates[] = {
+    [MOVE_REMINDER_SPRITE_0] =
     {
-        0x92,
-        0x8,
-        0x0,
-        0x0,
-        0x0,
-        0x0,
-        NNS_G2D_VRAM_TYPE_2DMAIN,
-        { 0xB8A8, 0xB8A8, 0xB8A8, 0xB8A8, 0x0, 0x0 },
-        0x2,
-        0x0,
+        .x = 146,
+        .y = 8,
+        .z = 0,
+        .animIdx = 0,
+        .priority = 0,
+        .plttIdx = 0,
+        .vramType = NNS_G2D_VRAM_TYPE_2DMAIN,
+        .resources = { 0xB8A8, 0xB8A8, 0xB8A8, 0xB8A8, 0x0, 0x0 },
+        .bgPriority = 2,
+        .vramTransfer = FALSE,
     },
+    [MOVE_REMINDER_SPRITE_1] =
     {
-        0xF6,
-        0x8,
-        0x0,
-        0x1,
-        0x0,
-        0x0,
-        NNS_G2D_VRAM_TYPE_2DMAIN,
-        { 0xB8A8, 0xB8A8, 0xB8A8, 0xB8A8, 0x0, 0x0 },
-        0x2,
-        0x0,
+        .x = 246,
+        .y = 8,
+        .z = 0,
+        .animIdx = 1,
+        .priority = 0,
+        .plttIdx = 0,
+        .vramType = NNS_G2D_VRAM_TYPE_2DMAIN,
+        .resources = { 0xB8A8, 0xB8A8, 0xB8A8, 0xB8A8, 0x0, 0x0 },
+        .bgPriority = 2,
+        .vramTransfer = FALSE,
     },
+    [MOVE_REMINDER_SPRITE_2] =
     {
-        0xC4,
-        0x14,
-        0x0,
-        0x0,
-        0x0,
-        0x0,
-        NNS_G2D_VRAM_TYPE_2DMAIN,
-        { 0xB8A9, 0xB8A8, 0xB8A9, 0xB8A9, 0x0, 0x0 },
-        0x2,
-        0x0,
+        .x = 196,
+        .y = 20,
+        .z = 0,
+        .animIdx = 0,
+        .priority = 0,
+        .plttIdx = 0,
+        .vramType = NNS_G2D_VRAM_TYPE_2DMAIN,
+        .resources = { 0xB8A9, 0xB8A8, 0xB8A9, 0xB8A9, 0x0, 0x0 },
+        .bgPriority = 2,
+        .vramTransfer = FALSE,
     },
+    [MOVE_REMINDER_SPRITE_3] =
     {
-        0xC4,
-        0x8C,
-        0x0,
-        0x1,
-        0x0,
-        0x0,
-        NNS_G2D_VRAM_TYPE_2DMAIN,
-        { 0xB8A9, 0xB8A8, 0xB8A9, 0xB8A9, 0x0, 0x0 },
-        0x2,
-        0x0,
+        .x = 196,
+        .y = 140,
+        .z = 0,
+        .animIdx = 1,
+        .priority = 0,
+        .plttIdx = 0,
+        .vramType = NNS_G2D_VRAM_TYPE_2DMAIN,
+        .resources = { 0xB8A9, 0xB8A8, 0xB8A9, 0xB8A9, 0x0, 0x0 },
+        .bgPriority = 2,
+        .vramTransfer = FALSE,
     },
+    [MOVE_REMINDER_SPRITE_CURSOR] =
     {
-        0xC4,
-        0x20,
-        0x0,
-        0x0,
-        0x0,
-        0x0,
-        NNS_G2D_VRAM_TYPE_2DMAIN,
-        { 0xB8AA, 0xB8A8, 0xB8AA, 0xB8AA, 0x0, 0x0 },
-        0x1,
-        0x0,
+        .x = 196,
+        .y = 32,
+        .z = 0,
+        .animIdx = 0,
+        .priority = 0,
+        .plttIdx = 0,
+        .vramType = NNS_G2D_VRAM_TYPE_2DMAIN,
+        .resources = { 0xB8AA, 0xB8A8, 0xB8AA, 0xB8AA, 0x0, 0x0 },
+        .bgPriority = 1,
+        .vramTransfer = FALSE,
     },
+    [MOVE_REMINDER_SPRITE_5] =
     {
-        0x74,
-        0x8,
-        0x0,
-        0x0,
-        0x0,
-        0x2,
-        NNS_G2D_VRAM_TYPE_2DMAIN,
-        { 0xB8AB, 0xB8A8, 0xB8AB, 0xB8AB, 0x0, 0x0 },
-        0x2,
-        0x0,
+        .x = 116,
+        .y = 8,
+        .z = 0,
+        .animIdx = 0,
+        .priority = 0,
+        .plttIdx = 2,
+        .vramType = NNS_G2D_VRAM_TYPE_2DMAIN,
+        .resources = { 0xB8AB, 0xB8A8, 0xB8AB, 0xB8AB, 0x0, 0x0 },
+        .bgPriority = 2,
+        .vramTransfer = FALSE,
     },
+    [MOVE_REMINDER_SPRITE_6] =
     {
-        0x98,
-        0x20,
-        0x0,
-        0x0,
-        0x1,
-        0x2,
-        NNS_G2D_VRAM_TYPE_2DMAIN,
-        { 0xB8AC, 0xB8A8, 0xB8AB, 0xB8AB, 0x0, 0x0 },
-        0x2,
-        0x0,
+        .x = 152,
+        .y = 32,
+        .z = 0,
+        .animIdx = 0,
+        .priority = 1,
+        .plttIdx = 2,
+        .vramType = NNS_G2D_VRAM_TYPE_2DMAIN,
+        .resources = { 0xB8AC, 0xB8A8, 0xB8AB, 0xB8AB, 0x0, 0x0 },
+        .bgPriority = 2,
+        .vramTransfer = FALSE,
     },
+    [MOVE_REMINDER_SPRITE_7] =
     {
-        0x98,
-        0x30,
-        0x0,
-        0x0,
-        0x1,
-        0x2,
-        NNS_G2D_VRAM_TYPE_2DMAIN,
-        { 0xB8AD, 0xB8A8, 0xB8AB, 0xB8AB, 0x0, 0x0 },
-        0x2,
-        0x0,
+        .x = 152,
+        .y = 48,
+        .z = 0,
+        .animIdx = 0,
+        .priority = 1,
+        .plttIdx = 2,
+        .vramType = NNS_G2D_VRAM_TYPE_2DMAIN,
+        .resources = { 0xB8AD, 0xB8A8, 0xB8AB, 0xB8AB, 0x0, 0x0 },
+        .bgPriority = 2,
+        .vramTransfer = FALSE,
     },
+    [MOVE_REMINDER_SPRITE_8] =
     {
-        0x98,
-        0x40,
-        0x0,
-        0x0,
-        0x1,
-        0x2,
-        NNS_G2D_VRAM_TYPE_2DMAIN,
-        { 0xB8AE, 0xB8A8, 0xB8AB, 0xB8AB, 0x0, 0x0 },
-        0x2,
-        0x0,
+        .x = 152,
+        .y = 64,
+        .z = 0,
+        .animIdx = 0,
+        .priority = 1,
+        .plttIdx = 2,
+        .vramType = NNS_G2D_VRAM_TYPE_2DMAIN,
+        .resources = { 0xB8AE, 0xB8A8, 0xB8AB, 0xB8AB, 0x0, 0x0 },
+        .bgPriority = 2,
+        .vramTransfer = FALSE,
     },
+    [MOVE_REMINDER_SPRITE_9] =
     {
-        0x98,
-        0x50,
-        0x0,
-        0x0,
-        0x1,
-        0x2,
-        NNS_G2D_VRAM_TYPE_2DMAIN,
-        { 0xB8AF, 0xB8A8, 0xB8AB, 0xB8AB, 0x0, 0x0 },
-        0x2,
-        0x0,
+        .x = 152,
+        .y = 80,
+        .z = 0,
+        .animIdx = 0,
+        .priority = 1,
+        .plttIdx = 2,
+        .vramType = NNS_G2D_VRAM_TYPE_2DMAIN,
+        .resources = { 0xB8AF, 0xB8A8, 0xB8AB, 0xB8AB, 0x0, 0x0 },
+        .bgPriority = 2,
+        .vramTransfer = FALSE,
     },
+    [MOVE_REMINDER_SPRITE_10] =
     {
-        0x98,
-        0x60,
-        0x0,
-        0x0,
-        0x1,
-        0x2,
-        NNS_G2D_VRAM_TYPE_2DMAIN,
-        { 0xB8B0, 0xB8A8, 0xB8AB, 0xB8AB, 0x0, 0x0 },
-        0x2,
-        0x0,
+        .x = 152,
+        .y = 96,
+        .z = 0,
+        .animIdx = 0,
+        .priority = 1,
+        .plttIdx = 2,
+        .vramType = NNS_G2D_VRAM_TYPE_2DMAIN,
+        .resources = { 0xB8B0, 0xB8A8, 0xB8AB, 0xB8AB, 0x0, 0x0 },
+        .bgPriority = 2,
+        .vramTransfer = FALSE,
     },
+    [MOVE_REMINDER_SPRITE_11] =
     {
-        0x98,
-        0x70,
-        0x0,
-        0x0,
-        0x1,
-        0x2,
-        NNS_G2D_VRAM_TYPE_2DMAIN,
-        { 0xB8B1, 0xB8A8, 0xB8AB, 0xB8AB, 0x0, 0x0 },
-        0x2,
-        0x0,
+        .x = 152,
+        .y = 112,
+        .z = 0,
+        .animIdx = 0,
+        .priority = 1,
+        .plttIdx = 2,
+        .vramType = NNS_G2D_VRAM_TYPE_2DMAIN,
+        .resources = { 0xB8B1, 0xB8A8, 0xB8AB, 0xB8AB, 0x0, 0x0 },
+        .bgPriority = 2,
+        .vramTransfer = FALSE,
     },
+    [MOVE_REMINDER_SPRITE_12] =
     {
-        0x98,
-        0x80,
-        0x0,
-        0x0,
-        0x1,
-        0x2,
-        NNS_G2D_VRAM_TYPE_2DMAIN,
-        { 0xB8B2, 0xB8A8, 0xB8AB, 0xB8AB, 0x0, 0x0 },
-        0x2,
-        0x0,
+        .x = 152,
+        .y = 128,
+        .z = 0,
+        .animIdx = 0,
+        .priority = 1,
+        .plttIdx = 2,
+        .vramType = NNS_G2D_VRAM_TYPE_2DMAIN,
+        .resources = { 0xB8B2, 0xB8A8, 0xB8AB, 0xB8AB, 0x0, 0x0 },
+        .bgPriority = 2,
+        .vramTransfer = FALSE,
     },
 };
 
-int ov91_021D0D80(OverlayManager *param0, int *param1)
+int MoveReminder_Init(OverlayManager *overlayMan, int *state)
 {
-    UnkStruct_ov91_021D0ED8 *v0;
+    MoveReminder *reminder;
 
-    Heap_Create(HEAP_ID_APPLICATION, HEAP_ID_67, 0x20000);
+    Heap_Create(HEAP_ID_APPLICATION, HEAP_ID_MOVE_REMINDER, HEAP_SIZE_MOVE_REMINDER_APP);
 
-    v0 = OverlayManager_NewData(param0, sizeof(UnkStruct_ov91_021D0ED8), HEAP_ID_67);
-    memset(v0, 0, sizeof(UnkStruct_ov91_021D0ED8));
-    v0->unk_00 = OverlayManager_Args(param0);
+    reminder = OverlayManager_NewData(overlayMan, sizeof(MoveReminder), HEAP_ID_MOVE_REMINDER);
+    memset(reminder, 0, sizeof(MoveReminder));
+    reminder->data = OverlayManager_Args(overlayMan);
 
-    ov91_021D0ED8(v0);
-    ov91_021D2548(v0, v0->unk_00->unk_10, 0);
-    ov91_021D1C10(v0, 0);
-    ov91_021D1580(v0, 12, FONT_MESSAGE, TEXT_COLOR(1, 2, 15), 0);
+    MoveReminder_LoadGraphics(reminder);
+    MoveReminder_UpdateCursor(reminder, reminder->data->cursorPos, 0);
+    MoveReminder_FormatStrbuf(reminder, FMTSTR_TEACH_WHICH_MOVE);
+    MoveReminder_PrintStrbuf(reminder, MOVE_REMINDER_WINDOW_12, FONT_MESSAGE, TEXT_COLOR(1, 2, 15), ALIGN_MODE_LEFT);
 
-    v0->unk_180 = 1;
+    reminder->state = 1;
 
-    Window_ScheduleCopyToVRAM(&v0->unk_08[12]);
-    ov91_021D2594(v0);
-    SetVBlankCallback(ov91_021D0F9C, v0);
+    Window_ScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_12]);
+    ov91_021D2594(reminder);
+    SetVBlankCallback(MoveReminder_VBlank, reminder);
 
-    return 1;
+    return TRUE;
 }
 
-int ov91_021D0E08(OverlayManager *param0, int *param1)
+int MoveReminder_Main(OverlayManager *overlayMan, int *state)
 {
-    UnkStruct_ov91_021D0ED8 *v0 = OverlayManager_Data(param0);
+    MoveReminder *reminder = OverlayManager_Data(overlayMan);
 
-    switch (*param1) {
+    switch (*state) {
     case 0:
-        *param1 = ov91_021D1214(v0);
+        *state = MoveReminder_WaitScreenTransition(reminder);
         break;
     case 1:
-        *param1 = ov91_021D122C(v0);
+        *state = MoveReminder_Select(reminder);
         break;
     case 2:
-        *param1 = ov91_021D134C(v0);
+        *state = MoveReminder_HasTextPrinterFinished(reminder);
         break;
     case 3:
-        *param1 = ov91_021D136C(v0);
+        *state = MoveReminder_MakeYesNoChoice(reminder);
         break;
     case 4:
-        *param1 = ov91_021D1394(v0);
+        *state = MoveReminder_SelectYesNo(reminder);
         break;
     case 5:
-        *param1 = ov91_021D13E4(v0);
+        *state = MoveReminder_SetMoveSlotToSelectedMove(reminder);
         break;
     case 6:
-        *param1 = ov91_021D1438(v0);
+        *state = MoveReminder_PrintMonLearnedMove2(reminder);
         break;
     case 7:
-        *param1 = ov91_021D1450(v0);
+        *state = MoveReminder_PrintForgotOrStopTeachingMove(reminder);
         break;
     case 8:
-        *param1 = ov91_021D1480(v0);
+        *state = MoveReminder_ScreenTransitionOut(reminder);
         break;
     case 9:
-        return 1;
+        return TRUE;
     case 10:
-        *param1 = ov91_021D2604(v0);
+        *state = MoveReminder_ScreenTransitionIn(reminder);
         break;
     case 11:
-        *param1 = ov91_021D261C(v0);
-        return 0;
+        *state = MoveReminder_OpenSummaryScreenApp(reminder);
+        return FALSE;
     case 12:
-        *param1 = ov91_021D26AC(v0);
-        return 0;
+        *state = MoveReminder_ReloadApp(reminder);
+        return FALSE;
     }
 
-    ov91_021D20E8(v0);
-    SpriteSystem_DrawSprites(v0->unk_114);
+    MoveReminder_UpdateSpritesAnim(reminder);
+    SpriteSystem_DrawSprites(reminder->spriteMan);
 
-    return 0;
+    return FALSE;
 }
 
-int ov91_021D0EBC(OverlayManager *param0, int *param1)
+int MoveReminder_Exit(OverlayManager *overlayMan, int *state)
 {
-    UnkStruct_ov91_021D0ED8 *v0 = OverlayManager_Data(param0);
+    MoveReminder *reminder = OverlayManager_Data(overlayMan);
 
-    ov91_021D0F6C(v0);
+    MoveReminder_Free(reminder);
+    OverlayManager_FreeData(overlayMan);
+    Heap_Destroy(HEAP_ID_MOVE_REMINDER);
 
-    OverlayManager_FreeData(param0);
-    Heap_Destroy(HEAP_ID_67);
-
-    return 1;
+    return TRUE;
 }
 
-static void ov91_021D0ED8(UnkStruct_ov91_021D0ED8 *param0)
+static void MoveReminder_LoadGraphics(MoveReminder *reminder)
 {
-    NARC *v0;
-
     SetVBlankCallback(NULL, NULL);
     DisableHBlank();
 
@@ -439,710 +608,685 @@ static void ov91_021D0ED8(UnkStruct_ov91_021D0ED8 *param0)
     GX_SetVisiblePlane(0);
     GXS_SetVisiblePlane(0);
 
-    param0->unk_04 = BgConfig_New(HEAP_ID_67);
+    reminder->bgConfig = BgConfig_New(HEAP_ID_MOVE_REMINDER);
 
-    sub_0208C120(0, HEAP_ID_67);
+    sub_0208C120(0, HEAP_ID_MOVE_REMINDER);
 
-    v0 = NARC_ctor(NARC_INDEX_GRAPHIC__WAZA_OSHIE_GRA, HEAP_ID_67);
+    NARC *narc = NARC_ctor(NARC_INDEX_GRAPHIC__WAZA_OSHIE_GRA, HEAP_ID_MOVE_REMINDER);
 
-    ov91_021D0FC4();
-    ov91_021D0FE4(param0->unk_04);
-    ov91_021D10C8(param0, v0);
-    ov91_021D2508(param0, v0);
-    ov91_021D11B8(param0);
-    ov91_021D1154(param0);
-    ov91_021D1784(param0);
-    ov91_021D1498(param0);
+    MoveReminder_SetGXLayersBanks();
+    MoveReminder_SetBGLayers(reminder->bgConfig);
+    MoveReminder_LoadGraphicsFromNARC(reminder, narc);
+    MoveReminder_LoadSprites(reminder, narc);
+    MoveReminder_LoadStrings(reminder);
+    MoveReminder_LoadWindows(reminder);
+    MoveReminder_InitListMenu(reminder);
+    MoveReminder_LoadSelectedMoveInfo(reminder);
 
-    SetVBlankCallback(ov91_021D0F9C, param0);
-    NARC_dtor(v0);
+    SetVBlankCallback(MoveReminder_VBlank, reminder);
+    NARC_dtor(narc);
 }
 
-static void ov91_021D0F6C(UnkStruct_ov91_021D0ED8 *param0)
+static void MoveReminder_Free(MoveReminder *reminder)
 {
-    ov91_021D1868(param0);
-    ov91_021D11A0(param0);
-    ov91_021D1098(param0->unk_04);
-    ov91_021D11F0(param0);
-    ov91_021D20B4(param0);
+    MoveReminder_FreeListMenu(reminder);
+    MoveReminder_FreeWindows(reminder);
+    MoveReminder_FreeBgConfig(reminder->bgConfig);
+    MoveReminder_FreeStrings(reminder);
+    MoveReminder_FreeSprites(reminder);
 
     VramTransfer_Free();
     SetVBlankCallback(NULL, NULL);
 }
 
-static void ov91_021D0F9C(void *param0)
+static void MoveReminder_VBlank(void *data)
 {
-    UnkStruct_ov91_021D0ED8 *v0 = param0;
+    MoveReminder *reminder = data;
 
-    Bg_RunScheduledUpdates(v0->unk_04);
+    Bg_RunScheduledUpdates(reminder->bgConfig);
     VramTransfer_Process();
     SpriteSystem_TransferOam();
 
     OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
-static void ov91_021D0FC4(void)
+static void MoveReminder_SetGXLayersBanks(void)
 {
-    UnkStruct_02099F80 v0 = {
-        GX_VRAM_BG_128_A,
-        GX_VRAM_BGEXTPLTT_NONE,
-        GX_VRAM_SUB_BG_128_C,
-        GX_VRAM_SUB_BGEXTPLTT_NONE,
-        GX_VRAM_OBJ_128_B,
-        GX_VRAM_OBJEXTPLTT_NONE,
-        GX_VRAM_SUB_OBJ_16_I,
-        GX_VRAM_SUB_OBJEXTPLTT_NONE,
-        GX_VRAM_TEX_NONE,
-        GX_VRAM_TEXPLTT_NONE
+    UnkStruct_02099F80 banks = {
+        .unk_00 = GX_VRAM_BG_128_A,
+        .unk_04 = GX_VRAM_BGEXTPLTT_NONE,
+        .unk_08 = GX_VRAM_SUB_BG_128_C,
+        .unk_0C = GX_VRAM_SUB_BGEXTPLTT_NONE,
+        .unk_10 = GX_VRAM_OBJ_128_B,
+        .unk_14 = GX_VRAM_OBJEXTPLTT_NONE,
+        .unk_18 = GX_VRAM_SUB_OBJ_16_I,
+        .unk_1C = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+        .unk_20 = GX_VRAM_TEX_NONE,
+        .unk_24 = GX_VRAM_TEXPLTT_NONE
     };
 
-    GXLayers_SetBanks(&v0);
+    GXLayers_SetBanks(&banks);
 }
 
-static void ov91_021D0FE4(BgConfig *param0)
+static void MoveReminder_SetBGLayers(BgConfig *bgConfig)
 {
-    {
-        GraphicsModes v0 = {
-            GX_DISPMODE_GRAPHICS,
-            GX_BGMODE_0,
-            GX_BGMODE_0,
-            GX_BG0_AS_2D,
-        };
+    GraphicsModes graphicsModes = {
+        .displayMode = GX_DISPMODE_GRAPHICS,
+        .mainBgMode = GX_BGMODE_0,
+        .subBgMode = GX_BGMODE_0,
+        .bg0As2DOr3D = GX_BG0_AS_2D,
+    };
 
-        SetAllGraphicsModes(&v0);
-    }
+    SetAllGraphicsModes(&graphicsModes);
 
-    {
-        BgTemplate v1 = {
-            0,
-            0,
-            0x800,
-            0,
-            1,
-            GX_BG_COLORMODE_16,
-            GX_BG_SCRBASE_0xf800,
-            GX_BG_CHARBASE_0x00000,
-            GX_BG_EXTPLTT_01,
-            0,
-            0,
-            0,
-            0
-        };
+    BgTemplate bgMain0Template = {
+        .x = 0,
+        .y = 0,
+        .bufferSize = 0x800,
+        .baseTile = 0,
+        .screenSize = 1,
+        .colorMode = GX_BG_COLORMODE_16,
+        .screenBase = GX_BG_SCRBASE_0xf800,
+        .charBase = GX_BG_CHARBASE_0x00000,
+        .bgExtPltt = GX_BG_EXTPLTT_01,
+        .priority = 0,
+        .areaOver = 0,
+        .dummy = 0,
+        .mosaic = 0
+    };
 
-        Bg_InitFromTemplate(param0, 0, &v1, 0);
-        Bg_ClearTilemap(param0, 0);
-    }
+    Bg_InitFromTemplate(bgConfig, BG_LAYER_MAIN_0, &bgMain0Template, BG_TYPE_STATIC);
+    Bg_ClearTilemap(bgConfig, BG_LAYER_MAIN_0);
 
-    {
-        BgTemplate v2 = {
-            0,
-            0,
-            0x800,
-            0,
-            1,
-            GX_BG_COLORMODE_16,
-            GX_BG_SCRBASE_0xf000,
-            GX_BG_CHARBASE_0x00000,
-            GX_BG_EXTPLTT_01,
-            1,
-            0,
-            0,
-            0
-        };
+    BgTemplate bgMain1Template = {
+        .x = 0,
+        .y = 0,
+        .bufferSize = 0x800,
+        .baseTile = 0,
+        .screenSize = 1,
+        .colorMode = GX_BG_COLORMODE_16,
+        .screenBase = GX_BG_SCRBASE_0xf000,
+        .charBase = GX_BG_CHARBASE_0x00000,
+        .bgExtPltt = GX_BG_EXTPLTT_01,
+        .priority = 1,
+        .areaOver = 0,
+        .dummy = 0,
+        .mosaic = 0
+    };
 
-        Bg_InitFromTemplate(param0, 1, &v2, 0);
-        Bg_ClearTilemap(param0, 1);
-    }
+    Bg_InitFromTemplate(bgConfig, BG_LAYER_MAIN_1, &bgMain1Template, BG_TYPE_STATIC);
+    Bg_ClearTilemap(bgConfig, BG_LAYER_MAIN_1);
 
-    {
-        BgTemplate v3 = {
-            0,
-            0,
-            0x1000,
-            0,
-            3,
-            GX_BG_COLORMODE_16,
-            GX_BG_SCRBASE_0xe000,
-            GX_BG_CHARBASE_0x10000,
-            GX_BG_EXTPLTT_01,
-            2,
-            0,
-            0,
-            0
-        };
+    BgTemplate bgMain2Template = {
+        .x = 0,
+        .y = 0,
+        .bufferSize = 0x1000,
+        .baseTile = 0,
+        .screenSize = 3,
+        .colorMode = GX_BG_COLORMODE_16,
+        .screenBase = GX_BG_SCRBASE_0xe000,
+        .charBase = GX_BG_CHARBASE_0x10000,
+        .bgExtPltt = GX_BG_EXTPLTT_01,
+        .priority = 2,
+        .areaOver = 0,
+        .dummy = 0,
+        .mosaic = 0
+    };
 
-        Bg_InitFromTemplate(param0, 2, &v3, 0);
-        Bg_ClearTilemap(param0, 2);
-    }
+    Bg_InitFromTemplate(bgConfig, BG_LAYER_MAIN_2, &bgMain2Template, BG_TYPE_STATIC);
+    Bg_ClearTilemap(bgConfig, BG_LAYER_MAIN_2);
 
-    Bg_ClearTilesRange(0, 32, 0, HEAP_ID_67);
+    Bg_ClearTilesRange(0, 32, 0, HEAP_ID_MOVE_REMINDER);
 }
 
-static void ov91_021D1098(BgConfig *param0)
+static void MoveReminder_FreeBgConfig(BgConfig *bgConfig)
 {
-    GXLayers_EngineAToggleLayers(GX_PLANEMASK_BG0 | GX_PLANEMASK_BG1 | GX_PLANEMASK_BG2 | GX_PLANEMASK_OBJ, 0);
-    Bg_FreeTilemapBuffer(param0, 2);
-    Bg_FreeTilemapBuffer(param0, 1);
-    Bg_FreeTilemapBuffer(param0, 0);
-    Heap_FreeToHeapExplicit(HEAP_ID_67, param0);
+    GXLayers_EngineAToggleLayers(GX_PLANEMASK_BG0 | GX_PLANEMASK_BG1 | GX_PLANEMASK_BG2 | GX_PLANEMASK_OBJ, FALSE);
+    Bg_FreeTilemapBuffer(bgConfig, BG_LAYER_MAIN_2);
+    Bg_FreeTilemapBuffer(bgConfig, BG_LAYER_MAIN_1);
+    Bg_FreeTilemapBuffer(bgConfig, BG_LAYER_MAIN_0);
+    Heap_FreeToHeapExplicit(HEAP_ID_MOVE_REMINDER, bgConfig);
 }
 
-static void ov91_021D10C8(UnkStruct_ov91_021D0ED8 *param0, NARC *param1)
+static void MoveReminder_LoadGraphicsFromNARC(MoveReminder *reminder, NARC *narc)
 {
-    Graphics_LoadTilesToBgLayerFromOpenNARC(param1, 10, param0->unk_04, 2, 0, 0, 0, HEAP_ID_67);
-    Graphics_LoadTilemapToBgLayerFromOpenNARC(param1, 11, param0->unk_04, 2, 0, 0, 0, HEAP_ID_67);
-    Graphics_LoadPaletteFromOpenNARC(param1, 12, 0, 0, 0, HEAP_ID_67);
-    Font_LoadScreenIndicatorsPalette(0, 14 * 32, HEAP_ID_67);
-    LoadStandardWindowGraphics(param0->unk_04, 0, 1, 12, 0, HEAP_ID_67);
-    LoadMessageBoxGraphics(param0->unk_04, 0, (1 + 9), 13, Options_Frame(param0->unk_00->unk_08), HEAP_ID_67);
+    Graphics_LoadTilesToBgLayerFromOpenNARC(narc, 10, reminder->bgConfig, BG_LAYER_MAIN_2, 0, 0, FALSE, HEAP_ID_MOVE_REMINDER);
+    Graphics_LoadTilemapToBgLayerFromOpenNARC(narc, 11, reminder->bgConfig, BG_LAYER_MAIN_2, 0, 0, FALSE, HEAP_ID_MOVE_REMINDER);
+    Graphics_LoadPaletteFromOpenNARC(narc, 12, 0, 0, 0, HEAP_ID_MOVE_REMINDER);
+    Font_LoadScreenIndicatorsPalette(0, 14 * 32, HEAP_ID_MOVE_REMINDER);
+    LoadStandardWindowGraphics(reminder->bgConfig, BG_LAYER_MAIN_0, 1, 12, 0, HEAP_ID_MOVE_REMINDER);
+    LoadMessageBoxGraphics(reminder->bgConfig, BG_LAYER_MAIN_0, 10, FIELD_MESSAGE_PALETTE_INDEX, Options_Frame(reminder->data->options), HEAP_ID_MOVE_REMINDER);
 }
 
-static void ov91_021D1154(UnkStruct_ov91_021D0ED8 *param0)
+static void MoveReminder_LoadWindows(MoveReminder *reminder)
 {
-    u32 v0;
-
-    for (v0 = 0; v0 < 15; v0++) {
-        Window_AddFromTemplate(param0->unk_04, &param0->unk_08[v0], &Unk_ov91_021D2884[v0]);
-        Window_FillTilemap(&param0->unk_08[v0], 0);
+    for (u32 i = MOVE_REMINDER_SPRITE_0; i < MOVE_REMINDER_WINDOW_MAX; i++) {
+        Window_AddFromTemplate(reminder->bgConfig, &reminder->window[i], &sMoveReminder_WindowTemplates[i]);
+        Window_FillTilemap(&reminder->window[i], 0);
     }
 
-    ov91_021D1664(param0);
+    MoveReminder_PrintStaticInfo(reminder);
 
-    Window_FillTilemap(&param0->unk_08[12], 15);
-    Window_DrawMessageBoxWithScrollCursor(&param0->unk_08[12], 0, (1 + 9), 13);
+    Window_FillTilemap(&reminder->window[MOVE_REMINDER_WINDOW_12], 15);
+    Window_DrawMessageBoxWithScrollCursor(&reminder->window[MOVE_REMINDER_WINDOW_12], 0, (1 + 9), 13);
 }
 
-static void ov91_021D11A0(UnkStruct_ov91_021D0ED8 *param0)
+static void MoveReminder_FreeWindows(MoveReminder *reminder)
 {
-    u32 v0;
-
-    for (v0 = 0; v0 < 15; v0++) {
-        Window_Remove(&param0->unk_08[v0]);
+    for (u32 i = MOVE_REMINDER_SPRITE_0; i < MOVE_REMINDER_WINDOW_MAX; i++) {
+        Window_Remove(&reminder->window[i]);
     }
 }
 
-static void ov91_021D11B8(UnkStruct_ov91_021D0ED8 *param0)
+static void MoveReminder_LoadStrings(MoveReminder *reminder)
 {
-    param0->unk_F8 = MessageLoader_Init(MESSAGE_LOADER_BANK_HANDLE, NARC_INDEX_MSGDATA__PL_MSG, TEXT_BANK_UNK_0645, HEAP_ID_67);
-    param0->unk_FC = StringTemplate_Default(HEAP_ID_67);
-    param0->unk_100 = Strbuf_Init(256, HEAP_ID_67);
+    reminder->msgLoader = MessageLoader_Init(MESSAGE_LOADER_BANK_HANDLE, NARC_INDEX_MSGDATA__PL_MSG, TEXT_BANK_UNK_0645, HEAP_ID_MOVE_REMINDER);
+    reminder->strTemplate = StringTemplate_Default(HEAP_ID_MOVE_REMINDER);
+    reminder->strbuf = Strbuf_Init(256, HEAP_ID_MOVE_REMINDER);
 }
 
-static void ov91_021D11F0(UnkStruct_ov91_021D0ED8 *param0)
+static void MoveReminder_FreeStrings(MoveReminder *reminder)
 {
-    MessageLoader_Free(param0->unk_F8);
-    StringTemplate_Free(param0->unk_FC);
-    Strbuf_Free(param0->unk_100);
+    MessageLoader_Free(reminder->msgLoader);
+    StringTemplate_Free(reminder->strTemplate);
+    Strbuf_Free(reminder->strbuf);
 }
 
-static int ov91_021D1214(UnkStruct_ov91_021D0ED8 *param0)
+static int MoveReminder_WaitScreenTransition(MoveReminder *reminder)
 {
-    if (IsScreenTransitionDone() == 1) {
-        return param0->unk_180;
+    if (IsScreenTransitionDone() == TRUE) {
+        return reminder->state;
     }
 
-    return 0;
+    return FALSE;
 }
 
-static int ov91_021D122C(UnkStruct_ov91_021D0ED8 *param0)
+static int MoveReminder_Select(MoveReminder *reminder)
 {
-    u32 v0;
-    u16 v1, v2;
+    u32 input;
+    u16 listPos, cursorPos;
 
-    if (gSystem.pressedKeys & (PAD_KEY_LEFT | PAD_KEY_RIGHT)) {
+    if (JOY_NEW(PAD_KEY_LEFT | PAD_KEY_RIGHT)) {
         Sound_PlayEffect(SEQ_SE_DP_DECIDE);
-        param0->unk_00->unk_14 ^= 1;
-        ov91_021D1498(param0);
-        return 1;
+        reminder->data->unk_14 ^= 1;
+        MoveReminder_LoadSelectedMoveInfo(reminder);
+        return TRUE;
     }
 
-    ListMenu_GetListAndCursorPos(param0->unk_104, &v1, &v2);
-    v0 = ListMenu_ProcessInput(param0->unk_104);
-    ListMenu_GetListAndCursorPos(param0->unk_104, &param0->unk_00->unk_12, &param0->unk_00->unk_10);
-    ov91_021D237C(param0, v1, param0->unk_00->unk_12);
+    ListMenu_GetListAndCursorPos(reminder->list, &listPos, &cursorPos);
+    input = ListMenu_ProcessInput(reminder->list);
+    ListMenu_GetListAndCursorPos(reminder->list, &reminder->data->listPos, &reminder->data->cursorPos);
+    MoveReminder_MoveTypeSprites(reminder, listPos, reminder->data->listPos);
 
-    if (param0->unk_00->unk_10 != v2) {
-        ov91_021D2548(param0, param0->unk_00->unk_10, 0);
+    if (reminder->data->cursorPos != cursorPos) {
+        MoveReminder_UpdateCursor(reminder, reminder->data->cursorPos, 0);
     }
 
-    ov91_021D2594(param0);
+    ov91_021D2594(reminder);
 
-    switch (v0) {
-    case 0xffffffff:
+    switch (input) {
+    case LIST_NOTHING_CHOSEN:
         break;
-    case 0xfffffffe:
+    case LIST_CANCEL:
         Sound_PlayEffect(SEQ_SE_DP_DECIDE);
-        ov91_021D2548(param0, param0->unk_00->unk_10, 1);
-        ov91_021D25E4(param0);
-        ov91_021D1DF8(param0, 2);
-        param0->unk_186 = 1;
-        param0->unk_180 = 3;
+        MoveReminder_UpdateCursor(reminder, reminder->data->cursorPos, 1);
+        ov91_021D25E4(reminder);
+        MoveReminder_FormatAndPrintStrbuf(reminder, FMTSTR_GIVE_UP_TEACHING_MOVE);
+        reminder->unk_186 = 1;
+        reminder->state = 3;
         return 2;
     default:
         Sound_PlayEffect(SEQ_SE_DP_DECIDE);
-        ov91_021D2548(param0, param0->unk_00->unk_10, 1);
-        ov91_021D25E4(param0);
+        MoveReminder_UpdateCursor(reminder, reminder->data->cursorPos, 1);
+        ov91_021D25E4(reminder);
 
-        if (ov91_021D1EA0(param0) < 4) {
-            ov91_021D1DF8(param0, 1);
-            param0->unk_186 = 0;
-            param0->unk_180 = 3;
+        if (MoveReminder_CalculateTotalMoves(reminder) < 4) {
+            MoveReminder_FormatAndPrintStrbuf(reminder, FMTSTR_TEACH_THE_MOVE);
+            reminder->unk_186 = 0;
+            reminder->state = 3;
         } else {
-            ov91_021D1DF8(param0, 4);
-            param0->unk_186 = 2;
-            param0->unk_180 = 3;
+            MoveReminder_FormatAndPrintStrbuf(reminder, FMTSTR_MON_TRYING_TO_LEARN_MOVE);
+            reminder->unk_186 = 2;
+            reminder->state = 3;
         }
 
         return 2;
     }
 
-    return 1;
+    return TRUE;
 }
 
-static int ov91_021D134C(UnkStruct_ov91_021D0ED8 *param0)
+static int MoveReminder_HasTextPrinterFinished(MoveReminder *reminder)
 {
-    if (Text_IsPrinterActive(param0->unk_185) == 0) {
-        return param0->unk_180;
+    if (Text_IsPrinterActive(reminder->txtPrinterID) == FALSE) {
+        return reminder->state;
     }
 
     return 2;
 }
 
-static int ov91_021D136C(UnkStruct_ov91_021D0ED8 *param0)
+static int MoveReminder_MakeYesNoChoice(MoveReminder *reminder)
 {
-    param0->unk_10C = Menu_MakeYesNoChoice(param0->unk_04, &Unk_ov91_021D2884[14], 1, 12, 67);
+    reminder->menu = Menu_MakeYesNoChoice(reminder->bgConfig, &sMoveReminder_WindowTemplates[14], 1, 12, HEAP_ID_MOVE_REMINDER);
     return 4;
 }
 
-static int ov91_021D1394(UnkStruct_ov91_021D0ED8 *param0)
+static int MoveReminder_SelectYesNo(MoveReminder *reminder)
 {
-    switch (Menu_ProcessInputAndHandleExit(param0->unk_10C, 67)) {
+    switch (Menu_ProcessInputAndHandleExit(reminder->menu, HEAP_ID_MOVE_REMINDER)) {
     case 0:
-        return Unk_ov91_021D27DC[param0->unk_186].unk_00(param0);
-    case 0xfffffffe:
-        return Unk_ov91_021D27DC[param0->unk_186].unk_04(param0);
+        return Unk_ov91_021D27DC[reminder->unk_186].unk_00(reminder);
+    case MENU_CANCELED:
+        return Unk_ov91_021D27DC[reminder->unk_186].unk_04(reminder);
     }
 
     return 4;
 }
 
-static int ov91_021D13E4(UnkStruct_ov91_021D0ED8 *param0)
+static int MoveReminder_SetMoveSlotToSelectedMove(MoveReminder *reminder)
 {
-    u32 v0 = ov91_021D1DD0(param0);
-    Pokemon_SetValue(param0->unk_00->unk_00, MON_DATA_MOVE1 + param0->unk_00->unk_17, &v0);
+    u32 val = MoveReminder_SelectedMove(reminder);
+    Pokemon_SetValue(reminder->data->mon, MON_DATA_MOVE1 + reminder->data->moveSlot, &val);
 
-    v0 = 0;
-    Pokemon_SetValue(param0->unk_00->unk_00, MON_DATA_MOVE1_PP_UPS + param0->unk_00->unk_17, &v0);
+    val = 0;
+    Pokemon_SetValue(reminder->data->mon, MON_DATA_MOVE1_PP_UPS + reminder->data->moveSlot, &val);
 
-    v0 = MoveTable_CalcMaxPP(ov91_021D1DD0(param0), 0);
-    Pokemon_SetValue(param0->unk_00->unk_00, MON_DATA_MOVE1_CUR_PP + param0->unk_00->unk_17, &v0);
+    val = MoveTable_CalcMaxPP(MoveReminder_SelectedMove(reminder), 0);
+    Pokemon_SetValue(reminder->data->mon, MON_DATA_MOVE1_CUR_PP + reminder->data->moveSlot, &val);
 
-    param0->unk_00->unk_16 = 0;
+    reminder->data->unk_16 = FALSE;
 
     return 8;
 }
 
-static int ov91_021D1438(UnkStruct_ov91_021D0ED8 *param0)
+static int MoveReminder_PrintMonLearnedMove2(MoveReminder *reminder)
 {
-    ov91_021D1DF8(param0, 6);
-    param0->unk_180 = 5;
+    MoveReminder_FormatAndPrintStrbuf(reminder, FMTSTR_MON_LEARNED_MOVE2);
+    reminder->state = 5;
     return 2;
 }
 
-static int ov91_021D1450(UnkStruct_ov91_021D0ED8 *param0)
+static int MoveReminder_PrintForgotOrStopTeachingMove(MoveReminder *reminder)
 {
-    if (param0->unk_00->unk_17 < 4) {
-        ov91_021D1DF8(param0, 10);
-        param0->unk_186 = 4;
+    if (reminder->data->moveSlot < LEARNED_MOVES_MAX) {
+        MoveReminder_FormatAndPrintStrbuf(reminder, FMTSTR_MAKE_MON_FORGOT_MOVE);
+        reminder->unk_186 = 4;
     } else {
-        ov91_021D1DF8(param0, 7);
-        param0->unk_186 = 3;
+        MoveReminder_FormatAndPrintStrbuf(reminder, FMTSTR_MON_STOP_TEACHING_MOVE);
+        reminder->unk_186 = 3;
     }
 
-    param0->unk_180 = 3;
+    reminder->state = 3;
 
     return 2;
 }
 
-static int ov91_021D1480(UnkStruct_ov91_021D0ED8 *param0)
+static int MoveReminder_ScreenTransitionOut(MoveReminder *reminder)
 {
-    sub_0208C120(1, HEAP_ID_67);
-    param0->unk_180 = 9;
-    return 0;
+    sub_0208C120(1, HEAP_ID_MOVE_REMINDER);
+    reminder->state = 9;
+    return FALSE;
 }
 
-static void ov91_021D1498(UnkStruct_ov91_021D0ED8 *param0)
+static void MoveReminder_LoadSelectedMoveInfo(MoveReminder *reminder)
 {
-    u16 v0 = ov91_021D1DD0(param0);
+    u16 move = MoveReminder_SelectedMove(reminder);
 
-    if (param0->unk_00->unk_14 == 0) {
-        Bg_ScheduleScroll(param0->unk_04, 2, 0, 0);
-        Window_ClearAndScheduleCopyToVRAM(&param0->unk_08[1]);
-        Window_ClearAndScheduleCopyToVRAM(&param0->unk_08[6]);
-        Window_ClearAndScheduleCopyToVRAM(&param0->unk_08[11]);
-        Window_ScheduleCopyToVRAM(&param0->unk_08[0]);
+    if (reminder->data->unk_14 == 0) {
+        Bg_ScheduleScroll(reminder->bgConfig, BG_LAYER_MAIN_2, BG_OFFSET_UPDATE_SET_X, 0);
+        Window_ClearAndScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_1]);
+        Window_ClearAndScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_6]);
+        Window_ClearAndScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_11]);
+        Window_ScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_0]);
 
-        if (v0 != 0xffff) {
-            ov91_021D18C8(param0, v0);
+        if (move != (u16)-1) {
+            MoveReminder_PrintBattleInfo(reminder, move);
         } else {
-            ov91_021D18C8(param0, 0xfffffffe);
+            MoveReminder_PrintBattleInfo(reminder, LIST_CANCEL);
         }
     } else {
-        Bg_ScheduleScroll(param0->unk_04, 2, 0, 256);
-        Window_ClearAndScheduleCopyToVRAM(&param0->unk_08[0]);
-        Window_ClearAndScheduleCopyToVRAM(&param0->unk_08[2]);
-        Window_ClearAndScheduleCopyToVRAM(&param0->unk_08[3]);
-        Window_ClearAndScheduleCopyToVRAM(&param0->unk_08[4]);
-        Window_ClearAndScheduleCopyToVRAM(&param0->unk_08[5]);
-        Window_ClearAndScheduleCopyToVRAM(&param0->unk_08[10]);
-        Window_ClearAndScheduleCopyToVRAM(&param0->unk_08[7]);
-        Window_ClearAndScheduleCopyToVRAM(&param0->unk_08[8]);
-        Window_ClearAndScheduleCopyToVRAM(&param0->unk_08[9]);
-        Window_ScheduleCopyToVRAM(&param0->unk_08[1]);
+        Bg_ScheduleScroll(reminder->bgConfig, BG_LAYER_MAIN_2, BG_OFFSET_UPDATE_SET_X, 256);
+        Window_ClearAndScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_0]);
+        Window_ClearAndScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_2]);
+        Window_ClearAndScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_3]);
+        Window_ClearAndScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_4]);
+        Window_ClearAndScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_5]);
+        Window_ClearAndScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_10]);
+        Window_ClearAndScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_7]);
+        Window_ClearAndScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_8]);
+        Window_ClearAndScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_9]);
+        Window_ScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_1]);
 
-        if (v0 != 0xffff) {
-            ov91_021D1A68(param0, v0);
+        if (move != (u16)-1) {
+            MoveReminder_PrintContestInfo(reminder, move);
         } else {
-            ov91_021D1A68(param0, 0xfffffffe);
+            MoveReminder_PrintContestInfo(reminder, LIST_CANCEL);
         }
 
-        ManagedSprite_SetDrawFlag(param0->unk_118[5], 0);
+        ManagedSprite_SetDrawFlag(reminder->managedSprite[MOVE_REMINDER_SPRITE_5], 0);
     }
 
-    ov91_021D2314(param0);
+    MoveReminder_UpdateTypeSprites(reminder);
 }
 
-static void ov91_021D1580(UnkStruct_ov91_021D0ED8 *param0, u32 param1, u32 param2, TextColor param3, u32 param4)
+static void MoveReminder_PrintStrbuf(MoveReminder *reminder, u32 windowID, u32 fontID, TextColor color, enum XAlignmentModes xAlignMode)
 {
-    u8 v0;
-    u8 v1;
-    u8 v2;
+    u8 strWidth, winWidth, xOffset;
 
-    switch (param4) {
-    case 0:
-        v2 = 0;
+    switch (xAlignMode) {
+    case ALIGN_MODE_LEFT:
+        xOffset = 0;
         break;
-    case 1:
-        v0 = Font_CalcStrbufWidth(FONT_SYSTEM, param0->unk_100, 0);
-        v1 = Window_GetWidth(&param0->unk_08[param1]) * 8;
-        v2 = v1 - v0;
+    case ALIGN_MODE_RIGHT: // unused
+        strWidth = Font_CalcStrbufWidth(FONT_SYSTEM, reminder->strbuf, 0);
+        winWidth = Window_GetWidth(&reminder->window[windowID]) * 8;
+        xOffset = winWidth - strWidth;
         break;
-    case 2:
-        v0 = Font_CalcStrbufWidth(FONT_SYSTEM, param0->unk_100, 0);
-        v1 = Window_GetWidth(&param0->unk_08[param1]) * 8;
-        v2 = (v1 - v0) / 2;
+    case ALIGN_MODE_CENTER:
+        strWidth = Font_CalcStrbufWidth(FONT_SYSTEM, reminder->strbuf, 0);
+        winWidth = Window_GetWidth(&reminder->window[windowID]) * 8;
+        xOffset = (winWidth - strWidth) / 2;
         break;
     }
 
-    Text_AddPrinterWithParamsAndColor(&param0->unk_08[param1], param2, param0->unk_100, v2, 0, TEXT_SPEED_NO_TRANSFER, param3, NULL);
+    Text_AddPrinterWithParamsAndColor(&reminder->window[windowID], fontID, reminder->strbuf, xOffset, 0, TEXT_SPEED_NO_TRANSFER, color, NULL);
 }
 
-static void ov91_021D1618(UnkStruct_ov91_021D0ED8 *param0, u32 param1, u32 param2, u8 param3, u8 param4)
+static void ov91_021D1618(MoveReminder *reminder, u32 entryID, u32 val, u8 maxDigits, u8 paddingMode)
 {
-    Strbuf *v0 = MessageLoader_GetNewStrbuf(param0->unk_F8, param1);
-    StringTemplate_SetNumber(param0->unk_FC, 0, param2, param3, param4, 1);
-    StringTemplate_Format(param0->unk_FC, param0->unk_100, v0);
-    Strbuf_Free(v0);
+    Strbuf *fmtString = MessageLoader_GetNewStrbuf(reminder->msgLoader, entryID);
+    StringTemplate_SetNumber(reminder->strTemplate, 0, val, maxDigits, paddingMode, CHARSET_MODE_EN);
+    StringTemplate_Format(reminder->strTemplate, reminder->strbuf, fmtString);
+    Strbuf_Free(fmtString);
 }
 
-static void ov91_021D1664(UnkStruct_ov91_021D0ED8 *param0)
+static void MoveReminder_PrintStaticInfo(MoveReminder *reminder)
 {
-    u32 v0;
+    MessageLoader_GetStrbuf(reminder->msgLoader, pl_msg_00000645_00026, reminder->strbuf);
+    MoveReminder_PrintStrbuf(reminder, MOVE_REMINDER_WINDOW_0, FONT_SYSTEM, TEXT_COLOR(15, 14, 0), ALIGN_MODE_CENTER);
 
-    MessageLoader_GetStrbuf(param0->unk_F8, 26, param0->unk_100);
-    ov91_021D1580(param0, 0, FONT_SYSTEM, TEXT_COLOR(15, 14, 0), 2);
+    MessageLoader_GetStrbuf(reminder->msgLoader, pl_msg_00000645_00028, reminder->strbuf);
+    MoveReminder_PrintStrbuf(reminder, MOVE_REMINDER_WINDOW_1, FONT_SYSTEM, TEXT_COLOR(15, 14, 0), ALIGN_MODE_CENTER);
 
-    MessageLoader_GetStrbuf(param0->unk_F8, 28, param0->unk_100);
-    ov91_021D1580(param0, 1, FONT_SYSTEM, TEXT_COLOR(15, 14, 0), 2);
+    MessageLoader_GetStrbuf(reminder->msgLoader, pl_msg_00000645_00022, reminder->strbuf);
+    MoveReminder_PrintStrbuf(reminder, MOVE_REMINDER_WINDOW_2, FONT_SYSTEM, TEXT_COLOR(15, 14, 0), ALIGN_MODE_LEFT);
 
-    MessageLoader_GetStrbuf(param0->unk_F8, 22, param0->unk_100);
-    ov91_021D1580(param0, 2, FONT_SYSTEM, TEXT_COLOR(15, 14, 0), 0);
+    MessageLoader_GetStrbuf(reminder->msgLoader, pl_msg_00000645_00023, reminder->strbuf);
+    MoveReminder_PrintStrbuf(reminder, MOVE_REMINDER_WINDOW_3, FONT_SYSTEM, TEXT_COLOR(15, 14, 0), ALIGN_MODE_LEFT);
 
-    MessageLoader_GetStrbuf(param0->unk_F8, 23, param0->unk_100);
-    ov91_021D1580(param0, 3, FONT_SYSTEM, TEXT_COLOR(15, 14, 0), 0);
+    MessageLoader_GetStrbuf(reminder->msgLoader, pl_msg_00000645_00024, reminder->strbuf);
+    MoveReminder_PrintStrbuf(reminder, MOVE_REMINDER_WINDOW_4, FONT_SYSTEM, TEXT_COLOR(15, 14, 0), ALIGN_MODE_LEFT);
 
-    MessageLoader_GetStrbuf(param0->unk_F8, 24, param0->unk_100);
-    ov91_021D1580(param0, 4, FONT_SYSTEM, TEXT_COLOR(15, 14, 0), 0);
+    MessageLoader_GetStrbuf(reminder->msgLoader, pl_msg_00000645_00025, reminder->strbuf);
+    MoveReminder_PrintStrbuf(reminder, MOVE_REMINDER_WINDOW_5, FONT_SYSTEM, TEXT_COLOR(1, 2, 0), ALIGN_MODE_LEFT);
 
-    MessageLoader_GetStrbuf(param0->unk_F8, 25, param0->unk_100);
-    ov91_021D1580(param0, 5, FONT_SYSTEM, TEXT_COLOR(1, 2, 0), 0);
-
-    MessageLoader_GetStrbuf(param0->unk_F8, 27, param0->unk_100);
-    ov91_021D1580(param0, 6, FONT_SYSTEM, TEXT_COLOR(15, 14, 0), 2);
+    MessageLoader_GetStrbuf(reminder->msgLoader, pl_msg_00000645_00027, reminder->strbuf);
+    MoveReminder_PrintStrbuf(reminder, MOVE_REMINDER_WINDOW_6, FONT_SYSTEM, TEXT_COLOR(15, 14, 0), ALIGN_MODE_CENTER);
 }
 
-static u32 ov91_021D175C(UnkStruct_ov91_021D0ED8 *param0)
+static u32 ov91_021D175C(MoveReminder *reminder)
 {
-    u32 v0;
+    u32 i;
 
-    for (v0 = 0; v0 < 256; v0++) {
-        if (param0->unk_00->unk_0C[v0] == 0xffff) {
+    for (i = 0; i < 256; i++) {
+        if (reminder->data->movesList[i] == (u16)-1) {
             break;
         }
     }
 
-    return v0;
+    return i;
 }
 
-static void ov91_021D1784(UnkStruct_ov91_021D0ED8 *param0)
+static void MoveReminder_InitListMenu(MoveReminder *reminder)
 {
-    MessageLoader *v0;
-    ListMenuTemplate v1;
-    u32 v2;
+    MessageLoader *msgLoader;
+    ListMenuTemplate template;
 
-    param0->unk_184 = (u8)ov91_021D175C(param0) + 1;
-    param0->unk_108 = StringList_New(param0->unk_184, 67);
+    reminder->movesCount = (u8)ov91_021D175C(reminder) + 1;
+    reminder->strList = StringList_New(reminder->movesCount, HEAP_ID_MOVE_REMINDER);
 
-    v0 = MessageLoader_Init(
-        0, 26, 647, 67);
+    msgLoader = MessageLoader_Init(MESSAGE_LOADER_BANK_HANDLE, NARC_INDEX_MSGDATA__PL_MSG, TEXT_BANK_MOVE_NAMES, HEAP_ID_MOVE_REMINDER);
 
-    for (v2 = 0; v2 < param0->unk_184; v2++) {
-        if (param0->unk_00->unk_0C[v2] != 0xffff) {
-            StringList_AddFromMessageBank(
-                param0->unk_108, v0, param0->unk_00->unk_0C[v2], param0->unk_00->unk_0C[v2]);
+    for (u32 i = 0; i < reminder->movesCount; i++) {
+        if (reminder->data->movesList[i] != (u16)-1) {
+            StringList_AddFromMessageBank(reminder->strList, msgLoader, reminder->data->movesList[i], reminder->data->movesList[i]);
         } else {
-            StringList_AddFromMessageBank(
-                param0->unk_108, param0->unk_F8, 32, 0xfffffffe);
+            StringList_AddFromMessageBank(reminder->strList, reminder->msgLoader, pl_msg_00000645_00032, LIST_CANCEL);
             break;
         }
     }
 
-    MessageLoader_Free(v0);
+    MessageLoader_Free(msgLoader);
 
-    v1 = Unk_ov91_021D27BC;
-    v1.choices = param0->unk_108;
-    v1.window = &param0->unk_08[13];
-    v1.count = param0->unk_184;
-    v1.parent = (void *)param0;
+    template = sMoveReminder_ListMenuTemplate;
+    template.choices = reminder->strList;
+    template.window = &reminder->window[MOVE_REMINDER_WINDOW_13];
+    template.count = reminder->movesCount;
+    template.parent = (void *)reminder;
 
-    param0->unk_104 = ListMenu_New(&v1, param0->unk_00->unk_12, param0->unk_00->unk_10, 67);
+    reminder->list = ListMenu_New(&template, reminder->data->listPos, reminder->data->cursorPos, HEAP_ID_MOVE_REMINDER);
 
-    Window_ScheduleCopyToVRAM(&param0->unk_08[13]);
+    Window_ScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_13]);
 }
 
-static void ov91_021D1868(UnkStruct_ov91_021D0ED8 *param0)
+static void MoveReminder_FreeListMenu(MoveReminder *reminder)
 {
-    ListMenu_Free(param0->unk_104, &param0->unk_00->unk_12, &param0->unk_00->unk_10);
-    StringList_Free(param0->unk_108);
+    ListMenu_Free(reminder->list, &reminder->data->listPos, &reminder->data->cursorPos);
+    StringList_Free(reminder->strList);
 }
 
-static void ov91_021D188C(ListMenu *param0, u32 param1, u8 param2)
+static void MoveReminder_MenuCursorCallback(ListMenu *listMenu, u32 index, u8 onInit)
 {
-    UnkStruct_ov91_021D0ED8 *v0 = (UnkStruct_ov91_021D0ED8 *)ListMenu_GetAttribute(param0, 19);
+    MoveReminder *reminder = (MoveReminder *)ListMenu_GetAttribute(listMenu, 19);
 
-    if (param2 != 1) {
+    if (onInit != TRUE) {
         Sound_PlayEffect(SEQ_SE_DP_DECIDE);
     }
 
-    if (v0->unk_00->unk_14 == 0) {
-        ov91_021D18C8(v0, param1);
+    if (reminder->data->unk_14 == 0) {
+        MoveReminder_PrintBattleInfo(reminder, index);
     } else {
-        ov91_021D1A68(v0, param1);
+        MoveReminder_PrintContestInfo(reminder, index);
     }
 }
 
-static void ov91_021D18C4(ListMenu *param0, u32 param1, u8 param2)
+// clever gamefreak, clever.
+static void MoveReminder_MenuPrintCallback(ListMenu *listMenu, u32 index, u8 yOffset)
 {
     return;
 }
 
-static void ov91_021D18C8(UnkStruct_ov91_021D0ED8 *param0, u32 param1)
+static void MoveReminder_PrintBattleInfo(MoveReminder *reminder, u32 index)
 {
-    Window_FillTilemap(&param0->unk_08[10], 0);
-    Window_FillTilemap(&param0->unk_08[7], 0);
-    Window_FillTilemap(&param0->unk_08[8], 0);
-    Window_FillTilemap(&param0->unk_08[9], 0);
-    ManagedSprite_SetDrawFlag(param0->unk_118[5], 0);
+    Window_FillTilemap(&reminder->window[MOVE_REMINDER_WINDOW_10], 0);
+    Window_FillTilemap(&reminder->window[MOVE_REMINDER_WINDOW_7], 0);
+    Window_FillTilemap(&reminder->window[MOVE_REMINDER_WINDOW_8], 0);
+    Window_FillTilemap(&reminder->window[MOVE_REMINDER_WINDOW_9], 0);
+    ManagedSprite_SetDrawFlag(reminder->managedSprite[MOVE_REMINDER_SPRITE_5], FALSE);
 
-    if (param1 != 0xfffffffe) {
-        MessageLoader *v0;
-        u32 v1;
+    if (index != LIST_CANCEL) {
+        MessageLoader *msgLoader;
+        u32 moveInfo;
 
-        v1 = MoveTable_LoadParam(param1, MOVEATTRIBUTE_POWER);
+        moveInfo = MoveTable_LoadParam(index, MOVEATTRIBUTE_POWER);
 
-        if (v1 <= 1) {
-            MessageLoader_GetStrbuf(param0->unk_F8, 33, param0->unk_100);
+        if (moveInfo <= 1) {
+            MessageLoader_GetStrbuf(reminder->msgLoader, pl_msg_00000645_00033, reminder->strbuf);
         } else {
-            ov91_021D1618(param0, 29, v1, 3, 1);
+            ov91_021D1618(reminder, 29, moveInfo, 3, 1);
         }
 
-        ov91_021D1580(param0, 7, FONT_SYSTEM, TEXT_COLOR(1, 2, 0), 2);
+        MoveReminder_PrintStrbuf(reminder, MOVE_REMINDER_WINDOW_7, FONT_SYSTEM, TEXT_COLOR(1, 2, 0), ALIGN_MODE_CENTER);
 
-        v1 = MoveTable_LoadParam(param1, MOVEATTRIBUTE_ACCURACY);
+        moveInfo = MoveTable_LoadParam(index, MOVEATTRIBUTE_ACCURACY);
 
-        if (v1 == 0) {
-            MessageLoader_GetStrbuf(param0->unk_F8, 33, param0->unk_100);
+        if (moveInfo == 0) {
+            MessageLoader_GetStrbuf(reminder->msgLoader, pl_msg_00000645_00033, reminder->strbuf);
         } else {
-            ov91_021D1618(param0, 30, v1, 3, 1);
+            ov91_021D1618(reminder, 30, moveInfo, 3, 1);
         }
 
-        ov91_021D1580(param0, 8, FONT_SYSTEM, TEXT_COLOR(1, 2, 0), 2);
+        MoveReminder_PrintStrbuf(reminder, MOVE_REMINDER_WINDOW_8, FONT_SYSTEM, TEXT_COLOR(1, 2, 0), ALIGN_MODE_CENTER);
 
-        v1 = MoveTable_CalcMaxPP(param1, 0);
-        ov91_021D1618(param0, 31, v1, 2, 0);
-        ov91_021D1580(param0, 9, FONT_SYSTEM, TEXT_COLOR(1, 2, 0), 2);
+        moveInfo = MoveTable_CalcMaxPP(index, 0);
+        ov91_021D1618(reminder, 31, moveInfo, 2, 0);
+        MoveReminder_PrintStrbuf(reminder, MOVE_REMINDER_WINDOW_9, FONT_SYSTEM, TEXT_COLOR(1, 2, 0), ALIGN_MODE_CENTER);
 
-        v0 = MessageLoader_Init(MESSAGE_LOADER_NARC_HANDLE, NARC_INDEX_MSGDATA__PL_MSG, TEXT_BANK_MOVE_DESCRIPTIONS, HEAP_ID_67);
-        MessageLoader_GetStrbuf(v0, param1, param0->unk_100);
-        ov91_021D1580(param0, 10, FONT_SYSTEM, TEXT_COLOR(1, 2, 0), 0);
-        MessageLoader_Free(v0);
-        ov91_021D24B4(param0, param1);
-        ManagedSprite_SetDrawFlag(param0->unk_118[5], 1);
-        Window_ScheduleCopyToVRAM(&param0->unk_08[2]);
-        Window_ScheduleCopyToVRAM(&param0->unk_08[3]);
-        Window_ScheduleCopyToVRAM(&param0->unk_08[4]);
-        Window_ScheduleCopyToVRAM(&param0->unk_08[5]);
+        msgLoader = MessageLoader_Init(MESSAGE_LOADER_NARC_HANDLE, NARC_INDEX_MSGDATA__PL_MSG, TEXT_BANK_MOVE_DESCRIPTIONS, HEAP_ID_MOVE_REMINDER);
+        MessageLoader_GetStrbuf(msgLoader, index, reminder->strbuf);
+        MoveReminder_PrintStrbuf(reminder, MOVE_REMINDER_WINDOW_10, FONT_SYSTEM, TEXT_COLOR(1, 2, 0), ALIGN_MODE_LEFT);
+        MessageLoader_Free(msgLoader);
+        MoveReminder_UpdateClassSprite(reminder, index);
+        ManagedSprite_SetDrawFlag(reminder->managedSprite[MOVE_REMINDER_SPRITE_5], TRUE);
+        Window_ScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_2]);
+        Window_ScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_3]);
+        Window_ScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_4]);
+        Window_ScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_5]);
     } else {
-        Window_ClearAndScheduleCopyToVRAM(&param0->unk_08[2]);
-        Window_ClearAndScheduleCopyToVRAM(&param0->unk_08[3]);
-        Window_ClearAndScheduleCopyToVRAM(&param0->unk_08[4]);
-        Window_ClearAndScheduleCopyToVRAM(&param0->unk_08[5]);
+        Window_ClearAndScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_2]);
+        Window_ClearAndScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_3]);
+        Window_ClearAndScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_4]);
+        Window_ClearAndScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_5]);
     }
 
-    Window_ScheduleCopyToVRAM(&param0->unk_08[10]);
-    Window_ScheduleCopyToVRAM(&param0->unk_08[7]);
-    Window_ScheduleCopyToVRAM(&param0->unk_08[8]);
-    Window_ScheduleCopyToVRAM(&param0->unk_08[9]);
+    Window_ScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_10]);
+    Window_ScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_7]);
+    Window_ScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_8]);
+    Window_ScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_9]);
 }
 
-static void ov91_021D1A68(UnkStruct_ov91_021D0ED8 *param0, u32 param1)
+static void MoveReminder_PrintContestInfo(MoveReminder *reminder, u32 index)
 {
-    Window_FillTilemap(&param0->unk_08[11], 0);
+    Window_FillTilemap(&reminder->window[MOVE_REMINDER_WINDOW_11], 0);
 
-    if (param1 != 0xfffffffe) {
-        MessageLoader *v0;
-        u32 v1;
-        u32 v2;
+    if (index != LIST_CANCEL) {
+        MessageLoader *msgLoader;
+        u32 moveInfo, entryID;
 
-        v1 = MoveTable_LoadParam(param1, MOVEATTRIBUTE_CONTEST_EFFECT);
-        v2 = sub_0209577C(v1);
-        v0 = MessageLoader_Init(MESSAGE_LOADER_BANK_HANDLE, NARC_INDEX_MSGDATA__PL_MSG, TEXT_BANK_CONTEST_EFFECTS, HEAP_ID_67);
+        moveInfo = MoveTable_LoadParam(index, MOVEATTRIBUTE_CONTEST_EFFECT);
+        entryID = sub_0209577C(moveInfo);
+        msgLoader = MessageLoader_Init(MESSAGE_LOADER_BANK_HANDLE, NARC_INDEX_MSGDATA__PL_MSG, TEXT_BANK_CONTEST_EFFECTS, HEAP_ID_MOVE_REMINDER);
 
-        MessageLoader_GetStrbuf(v0, v2, param0->unk_100);
-        Text_AddPrinterWithParamsAndColor(&param0->unk_08[11], FONT_SYSTEM, param0->unk_100, 0, 0, TEXT_SPEED_NO_TRANSFER, TEXT_COLOR(1, 2, 0), NULL);
-        MessageLoader_Free(v0);
-        ov91_021D1BBC(param0, (u16)param1);
-        Window_ScheduleCopyToVRAM(&param0->unk_08[6]);
+        MessageLoader_GetStrbuf(msgLoader, entryID, reminder->strbuf);
+        Text_AddPrinterWithParamsAndColor(&reminder->window[MOVE_REMINDER_WINDOW_11], FONT_SYSTEM, reminder->strbuf, 0, 0, TEXT_SPEED_NO_TRANSFER, TEXT_COLOR(1, 2, 0), NULL);
+        MessageLoader_Free(msgLoader);
+        MoveReminder_PrintContestHeartsInfo(reminder, index);
+        Window_ScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_6]);
     } else {
-        ov91_021D1BBC(param0, 0xffff);
-        Window_ClearAndScheduleCopyToVRAM(&param0->unk_08[6]);
+        MoveReminder_PrintContestHeartsInfo(reminder, (u16)-1);
+        Window_ClearAndScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_6]);
     }
 
-    Window_ScheduleCopyToVRAM(&param0->unk_08[11]);
+    Window_ScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_11]);
 }
 
-static void ov91_021D1B00(UnkStruct_ov91_021D0ED8 *param0, u16 param1, u8 param2)
+static void MoveReminder_PrintContestHeart(MoveReminder *reminder, u16 fillVal, u8 x)
 {
-    Bg_FillTilemapRect(param0->unk_04, 2, param1, 34 + param2 * 2, 5, 1, 1, 16);
-    Bg_FillTilemapRect(param0->unk_04, 2, param1 + 1, 34 + param2 * 2 + 1, 5, 1, 1, 16);
-    Bg_FillTilemapRect(param0->unk_04, 2, param1 + 32, 34 + param2 * 2, 5 + 1, 1, 1, 16);
-    Bg_FillTilemapRect(param0->unk_04, 2, param1 + 33, 34 + param2 * 2 + 1, 5 + 1, 1, 1, 16);
+    Bg_FillTilemapRect(reminder->bgConfig, BG_LAYER_MAIN_2, fillVal, 34 + x * 2, 5, 1, 1, 16);
+    Bg_FillTilemapRect(reminder->bgConfig, BG_LAYER_MAIN_2, fillVal + 1, 34 + x * 2 + 1, 5, 1, 1, 16);
+    Bg_FillTilemapRect(reminder->bgConfig, BG_LAYER_MAIN_2, fillVal + 32, 34 + x * 2, 5 + 1, 1, 1, 16);
+    Bg_FillTilemapRect(reminder->bgConfig, BG_LAYER_MAIN_2, fillVal + 33, 34 + x * 2 + 1, 5 + 1, 1, 1, 16);
 }
 
-static void ov91_021D1B94(UnkStruct_ov91_021D0ED8 *param0)
+static void ov91_021D1B94(MoveReminder *reminder)
 {
-    u16 v0;
-
-    for (v0 = 0; v0 < 6; v0++) {
-        ov91_021D1B00(param0, 0x12, v0);
+    for (u16 i = 0; i < 6; i++) {
+        MoveReminder_PrintContestHeart(reminder, 18, i);
     }
 
-    Bg_ScheduleTilemapTransfer(param0->unk_04, 2);
+    Bg_ScheduleTilemapTransfer(reminder->bgConfig, BG_LAYER_MAIN_2);
 }
 
-static void ov91_021D1BBC(UnkStruct_ov91_021D0ED8 *param0, u16 param1)
+static void MoveReminder_PrintContestHeartsInfo(MoveReminder *reminder, u16 index)
 {
-    u32 v0;
-    u16 v1;
+    u32 moveEffect;
     s8 v2;
 
-    ov91_021D1B94(param0);
+    ov91_021D1B94(reminder);
 
-    if (param1 != 0xffff) {
-        v0 = MoveTable_LoadParam(param1, MOVEATTRIBUTE_CONTEST_EFFECT);
-        v2 = sub_02095734(v0) / 10;
+    if (index != (u16)-1) {
+        moveEffect = MoveTable_LoadParam(index, MOVEATTRIBUTE_CONTEST_EFFECT);
+        v2 = sub_02095734(moveEffect) / 10;
 
-        for (v1 = 0; v1 < v2; v1++) {
-            ov91_021D1B00(param0, 0xe, v1);
+        for (u16 i = 0; i < v2; i++) {
+            MoveReminder_PrintContestHeart(reminder, 14, i);
         }
     }
 
-    Bg_ScheduleTilemapTransfer(param0->unk_04, 2);
+    Bg_ScheduleTilemapTransfer(reminder->bgConfig, BG_LAYER_MAIN_2);
 }
 
-static void ov91_021D1C10(UnkStruct_ov91_021D0ED8 *param0, u32 param1)
+static void MoveReminder_FormatStrbuf(MoveReminder *reminder, enum FormatStrings fmt)
 {
-    Strbuf *v0;
-
-    switch (param1) {
-    case 0:
-        StringTemplate_SetNickname(param0->unk_FC, 0, Pokemon_GetBoxPokemon(param0->unk_00->unk_00));
+    switch (fmt) {
+    case FMTSTR_TEACH_WHICH_MOVE:
+        StringTemplate_SetNickname(reminder->strTemplate, 0, Pokemon_GetBoxPokemon(reminder->data->mon));
         break;
-    case 1:
-        StringTemplate_SetMoveName(param0->unk_FC, 1, ov91_021D1DD0(param0));
+    case FMTSTR_TEACH_THE_MOVE:
+        StringTemplate_SetMoveName(reminder->strTemplate, 1, MoveReminder_SelectedMove(reminder));
         break;
-    case 2:
-        StringTemplate_SetNickname(param0->unk_FC, 0, Pokemon_GetBoxPokemon(param0->unk_00->unk_00));
+    case FMTSTR_GIVE_UP_TEACHING_MOVE:
+        StringTemplate_SetNickname(reminder->strTemplate, 0, Pokemon_GetBoxPokemon(reminder->data->mon));
         break;
-    case 3:
-        StringTemplate_SetNickname(param0->unk_FC, 0, Pokemon_GetBoxPokemon(param0->unk_00->unk_00));
-        StringTemplate_SetMoveName(param0->unk_FC, 1, ov91_021D1DD0(param0));
+    case FMTSTR_MON_LEARNED_MOVE:
+        StringTemplate_SetNickname(reminder->strTemplate, 0, Pokemon_GetBoxPokemon(reminder->data->mon));
+        StringTemplate_SetMoveName(reminder->strTemplate, 1, MoveReminder_SelectedMove(reminder));
         break;
-    case 4:
-        StringTemplate_SetNickname(param0->unk_FC, 0, Pokemon_GetBoxPokemon(param0->unk_00->unk_00));
-        StringTemplate_SetMoveName(param0->unk_FC, 1, ov91_021D1DD0(param0));
+    case FMTSTR_MON_TRYING_TO_LEARN_MOVE:
+        StringTemplate_SetNickname(reminder->strTemplate, 0, Pokemon_GetBoxPokemon(reminder->data->mon));
+        StringTemplate_SetMoveName(reminder->strTemplate, 1, MoveReminder_SelectedMove(reminder));
         break;
-    case 5:
-        StringTemplate_SetNickname(param0->unk_FC, 0, Pokemon_GetBoxPokemon(param0->unk_00->unk_00));
-        StringTemplate_SetMoveName(param0->unk_FC, 1, ov91_021D1DE0(param0));
+    case FMTSTR_MON_FORGOT_MOVE:
+        StringTemplate_SetNickname(reminder->strTemplate, 0, Pokemon_GetBoxPokemon(reminder->data->mon));
+        StringTemplate_SetMoveName(reminder->strTemplate, 1, MoveReminder_MoveIndex(reminder));
         break;
-    case 6:
-        StringTemplate_SetNickname(param0->unk_FC, 0, Pokemon_GetBoxPokemon(param0->unk_00->unk_00));
-        StringTemplate_SetMoveName(param0->unk_FC, 1, ov91_021D1DD0(param0));
+    case FMTSTR_MON_LEARNED_MOVE2:
+        StringTemplate_SetNickname(reminder->strTemplate, 0, Pokemon_GetBoxPokemon(reminder->data->mon));
+        StringTemplate_SetMoveName(reminder->strTemplate, 1, MoveReminder_SelectedMove(reminder));
         break;
-    case 7:
-        StringTemplate_SetMoveName(param0->unk_FC, 1, ov91_021D1DD0(param0));
+    case FMTSTR_MON_STOP_TEACHING_MOVE:
+        StringTemplate_SetMoveName(reminder->strTemplate, 1, MoveReminder_SelectedMove(reminder));
         break;
-    case 8:
-        StringTemplate_SetNickname(param0->unk_FC, 0, Pokemon_GetBoxPokemon(param0->unk_00->unk_00));
-        StringTemplate_SetMoveName(param0->unk_FC, 1, ov91_021D1DD0(param0));
+    case FMTSTR_MON_DID_NOT_LEARN_MOVE:
+        StringTemplate_SetNickname(reminder->strTemplate, 0, Pokemon_GetBoxPokemon(reminder->data->mon));
+        StringTemplate_SetMoveName(reminder->strTemplate, 1, MoveReminder_SelectedMove(reminder));
         break;
-    case 9:
-        StringTemplate_SetPlayerName(param0->unk_FC, 2, param0->unk_00->unk_04);
+    case FMTSTR_PLAYER_HANDED_OVER_ITEM:
+        StringTemplate_SetPlayerName(reminder->strTemplate, 2, reminder->data->trainerInfo);
         break;
-    case 10:
-        StringTemplate_SetMoveName(param0->unk_FC, 0, ov91_021D1DE0(param0));
+    case FMTSTR_MAKE_MON_FORGOT_MOVE:
+        StringTemplate_SetMoveName(reminder->strTemplate, 0, MoveReminder_MoveIndex(reminder));
         break;
     }
 
-    v0 = MessageLoader_GetNewStrbuf(param0->unk_F8, Unk_ov91_021D282C[param0->unk_00->unk_15][param1]);
-    StringTemplate_Format(param0->unk_FC, param0->unk_100, v0);
-    Strbuf_Free(v0);
+    Strbuf *fmtString = MessageLoader_GetNewStrbuf(reminder->msgLoader, sMoveReminder_BankEntryIDs[reminder->data->unk_15][fmt]);
+    StringTemplate_Format(reminder->strTemplate, reminder->strbuf, fmtString);
+    Strbuf_Free(fmtString);
 }
 
-static u16 ov91_021D1DD0(UnkStruct_ov91_021D0ED8 *param0)
+static u16 MoveReminder_SelectedMove(MoveReminder *reminder)
 {
-    return param0->unk_00->unk_0C[param0->unk_00->unk_12 + param0->unk_00->unk_10];
+    return reminder->data->movesList[reminder->data->listPos + reminder->data->cursorPos];
 }
 
-static u16 ov91_021D1DE0(UnkStruct_ov91_021D0ED8 *param0)
+static u16 MoveReminder_MoveIndex(MoveReminder *reminder)
 {
-    return (u16)Pokemon_GetValue(param0->unk_00->unk_00, MON_DATA_MOVE1 + param0->unk_00->unk_17, NULL);
+    return Pokemon_GetValue(reminder->data->mon, MON_DATA_MOVE1 + reminder->data->moveSlot, NULL);
 }
 
-static void ov91_021D1DF8(UnkStruct_ov91_021D0ED8 *param0, u32 param1)
+static void MoveReminder_FormatAndPrintStrbuf(MoveReminder *reminder, enum FormatStrings fmt)
 {
-    Window_FillTilemap(&param0->unk_08[12], 15);
-    ov91_021D1C10(param0, param1);
-    RenderControlFlags_SetCanABSpeedUpPrint(1);
-    RenderControlFlags_SetAutoScrollFlags(0);
+    Window_FillTilemap(&reminder->window[MOVE_REMINDER_WINDOW_12], 15);
+    MoveReminder_FormatStrbuf(reminder, fmt);
+    RenderControlFlags_SetCanABSpeedUpPrint(TRUE);
+    RenderControlFlags_SetAutoScrollFlags(FALSE);
 
-    param0->unk_185 = Text_AddPrinterWithParams(&param0->unk_08[12], FONT_MESSAGE, param0->unk_100, 0, 0, Options_TextFrameDelay(param0->unk_00->unk_08), ov91_021D1E50);
+    reminder->txtPrinterID = Text_AddPrinterWithParams(&reminder->window[MOVE_REMINDER_WINDOW_12], FONT_MESSAGE, reminder->strbuf, 0, 0, Options_TextFrameDelay(reminder->data->options), MoveReminder_TextPrinterCallback);
 }
 
-static BOOL ov91_021D1E50(TextPrinterTemplate *param0, u16 param1)
+static BOOL MoveReminder_TextPrinterCallback(TextPrinterTemplate *template, u16 param)
 {
-    switch (param1) {
+    switch (param) {
     case 1:
         return Sound_IsAnyEffectPlaying();
     case 2:
@@ -1154,372 +1298,364 @@ static BOOL ov91_021D1E50(TextPrinterTemplate *param0, u16 param1)
         Sound_PlayFanfare(SEQ_FANFA1);
         break;
     case 5:
-        return Sound_IsEffectPlaying(1510);
+        return Sound_IsEffectPlaying(SEQ_SE_DP_KON);
     }
 
-    return 0;
+    return FALSE;
 }
 
-static u8 ov91_021D1EA0(UnkStruct_ov91_021D0ED8 *param0)
+static u8 MoveReminder_CalculateTotalMoves(MoveReminder *reminder)
 {
-    u8 v0;
+    u8 i;
 
-    for (v0 = 0; v0 < LEARNED_MOVES_MAX; v0++) {
-        if (Pokemon_GetValue(param0->unk_00->unk_00, MON_DATA_MOVE1 + v0, NULL) == 0) {
+    for (i = 0; i < LEARNED_MOVES_MAX; i++) {
+        if (Pokemon_GetValue(reminder->data->mon, MON_DATA_MOVE1 + i, NULL) == MOVE_NONE) {
             break;
         }
     }
 
-    return v0;
+    return i;
 }
 
-static int ov91_021D1EC8(UnkStruct_ov91_021D0ED8 *param0)
+static int MoveReminder_PrintMonLearnedMove(MoveReminder *reminder)
 {
-    ov91_021D1DF8(param0, 3);
+    MoveReminder_FormatAndPrintStrbuf(reminder, FMTSTR_MON_LEARNED_MOVE);
 
-    param0->unk_00->unk_17 = ov91_021D1EA0(param0);
-    param0->unk_180 = 5;
+    reminder->data->moveSlot = MoveReminder_CalculateTotalMoves(reminder);
+    reminder->state = 5;
 
     return 2;
 }
 
-static int ov91_021D1EE8(UnkStruct_ov91_021D0ED8 *param0)
+static int ov91_021D1EE8(MoveReminder *reminder)
 {
-    Window_FillTilemap(&param0->unk_08[12], 15);
+    Window_FillTilemap(&reminder->window[MOVE_REMINDER_WINDOW_12], 15);
 
-    ov91_021D1C10(param0, 0);
-    ov91_021D1580(param0, 12, FONT_MESSAGE, TEXT_COLOR(1, 2, 15), 0);
+    MoveReminder_FormatStrbuf(reminder, FMTSTR_TEACH_WHICH_MOVE);
+    MoveReminder_PrintStrbuf(reminder, MOVE_REMINDER_WINDOW_12, FONT_MESSAGE, TEXT_COLOR(1, 2, 15), ALIGN_MODE_LEFT);
 
-    Window_ScheduleCopyToVRAM(&param0->unk_08[12]);
+    Window_ScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_12]);
 
-    ov91_021D2548(param0, param0->unk_00->unk_10, 0);
-    ov91_021D2574(param0, 1);
+    MoveReminder_UpdateCursor(reminder, reminder->data->cursorPos, 0);
+    ov91_021D2574(reminder, TRUE);
 
-    return 1;
+    return TRUE;
 }
 
-static int ov91_021D1F38(UnkStruct_ov91_021D0ED8 *param0)
+static int ov91_021D1F38(MoveReminder *reminder)
 {
-    param0->unk_00->unk_16 = 1;
+    reminder->data->unk_16 = TRUE;
     return 8;
 }
 
-static int ov91_021D1F44(UnkStruct_ov91_021D0ED8 *param0)
+static int ov91_021D1F44(MoveReminder *reminder)
 {
-    Window_FillTilemap(&param0->unk_08[12], 15);
+    Window_FillTilemap(&reminder->window[MOVE_REMINDER_WINDOW_12], 15);
 
-    ov91_021D1C10(param0, 0);
-    ov91_021D1580(param0, 12, FONT_MESSAGE, TEXT_COLOR(1, 2, 15), 0);
+    MoveReminder_FormatStrbuf(reminder, FMTSTR_TEACH_WHICH_MOVE);
+    MoveReminder_PrintStrbuf(reminder, MOVE_REMINDER_WINDOW_12, FONT_MESSAGE, TEXT_COLOR(1, 2, 15), ALIGN_MODE_LEFT);
 
-    Window_ScheduleCopyToVRAM(&param0->unk_08[12]);
+    Window_ScheduleCopyToVRAM(&reminder->window[MOVE_REMINDER_WINDOW_12]);
 
-    ov91_021D2548(param0, param0->unk_00->unk_10, 0);
-    ov91_021D2574(param0, 1);
+    MoveReminder_UpdateCursor(reminder, reminder->data->cursorPos, 0);
+    ov91_021D2574(reminder, TRUE);
 
-    return 1;
+    return TRUE;
 }
 
-static int ov91_021D1F94(UnkStruct_ov91_021D0ED8 *param0)
+static int ov91_021D1F94(MoveReminder *reminder)
 {
-    param0->unk_180 = 10;
-    return 0;
+    reminder->state = 10;
+    return FALSE;
 }
 
-static int ov91_021D1FA0(UnkStruct_ov91_021D0ED8 *param0)
+static int ov91_021D1FA0(MoveReminder *reminder)
 {
-    ov91_021D1DF8(param0, 7);
-    param0->unk_186 = 3;
-    param0->unk_180 = 3;
+    MoveReminder_FormatAndPrintStrbuf(reminder, FMTSTR_MON_STOP_TEACHING_MOVE);
+    reminder->unk_186 = 3;
+    reminder->state = 3;
     return 2;
 }
 
-static int ov91_021D1FBC(UnkStruct_ov91_021D0ED8 *param0)
+static int ov91_021D1FBC(MoveReminder *reminder)
 {
-    ov91_021D1DF8(param0, 8);
-    param0->unk_180 = 8;
-    param0->unk_00->unk_16 = 1;
+    MoveReminder_FormatAndPrintStrbuf(reminder, FMTSTR_MON_DID_NOT_LEARN_MOVE);
+    reminder->state = 8;
+    reminder->data->unk_16 = TRUE;
     return 2;
 }
 
-static int ov91_021D1FD8(UnkStruct_ov91_021D0ED8 *param0)
+static int ov91_021D1FD8(MoveReminder *reminder)
 {
-    ov91_021D1DF8(param0, 4);
-    param0->unk_186 = 2;
-    param0->unk_180 = 3;
+    MoveReminder_FormatAndPrintStrbuf(reminder, FMTSTR_MON_TRYING_TO_LEARN_MOVE);
+    reminder->unk_186 = 2;
+    reminder->state = 3;
     return 2;
 }
 
-static int ov91_021D1FF4(UnkStruct_ov91_021D0ED8 *param0)
+static int ov91_021D1FF4(MoveReminder *reminder)
 {
-    ov91_021D1DF8(param0, 5);
-    param0->unk_180 = 6;
+    MoveReminder_FormatAndPrintStrbuf(reminder, FMTSTR_MON_FORGOT_MOVE);
+    reminder->state = 6;
     return 2;
 }
 
-static int ov91_021D2008(UnkStruct_ov91_021D0ED8 *param0)
+static int ov91_021D2008(MoveReminder *reminder)
 {
-    param0->unk_180 = 10;
-    return 0;
+    reminder->state = 10;
+    return FALSE;
 }
 
-static void ov91_021D2014(UnkStruct_ov91_021D0ED8 *param0)
+static void ov91_021D2014(MoveReminder *reminder)
 {
-    SpriteResourceCapacities v0 = {
+    SpriteResourceCapacities capacities = {
         11, 2, 4, 4, 0, 0
     };
 
-    VramTransfer_New(64, HEAP_ID_67);
+    VramTransfer_New(64, HEAP_ID_MOVE_REMINDER);
 
-    param0->unk_110 = SpriteSystem_Alloc(67);
-    param0->unk_114 = SpriteManager_New(param0->unk_110);
+    reminder->spriteSys = SpriteSystem_Alloc(HEAP_ID_MOVE_REMINDER);
+    reminder->spriteMan = SpriteManager_New(reminder->spriteSys);
 
-    {
-        RenderOamTemplate v1 = {
-            0,
-            128,
-            0,
-            32,
-            0,
-            128,
-            0,
-            32,
-        };
-        CharTransferTemplateWithModes v2 = {
-            13, 1024 * 128, 1024 * 16, GX_OBJVRAMMODE_CHAR_1D_32K, GX_OBJVRAMMODE_CHAR_1D_32K
-        };
+    RenderOamTemplate oamTemplate = {
+        .mainOamStart = 0,
+        .mainOamCount = 128,
+        .mainAffineOamStart = 0,
+        .mainAffineOamCount = 32,
+        .subOamStart = 0,
+        .subOamCount = 128,
+        .subAffineOamStart = 0,
+        .subAffineOamCount = 32,
+    };
+    CharTransferTemplateWithModes transferTemplate = {
+        .maxTasks = 13,
+        .sizeMain = 1024 * 128,
+        .sizeSub = 1024 * 16,
+        .modeMain = GX_OBJVRAMMODE_CHAR_1D_32K,
+        .modeSub = GX_OBJVRAMMODE_CHAR_1D_32K
+    };
 
-        SpriteSystem_Init(param0->unk_110, &v1, &v2, 32);
-    }
-
-    SpriteSystem_InitSprites(param0->unk_110, param0->unk_114, 13);
-    SpriteSystem_InitManagerWithCapacities(param0->unk_110, param0->unk_114, &v0);
-    GXLayers_EngineAToggleLayers(GX_PLANEMASK_OBJ, 1);
+    SpriteSystem_Init(reminder->spriteSys, &oamTemplate, &transferTemplate, 32);
+    SpriteSystem_InitSprites(reminder->spriteSys, reminder->spriteMan, 13);
+    SpriteSystem_InitManagerWithCapacities(reminder->spriteSys, reminder->spriteMan, &capacities);
+    GXLayers_EngineAToggleLayers(GX_PLANEMASK_OBJ, TRUE);
 }
 
-static void ov91_021D20B4(UnkStruct_ov91_021D0ED8 *param0)
+static void MoveReminder_FreeSprites(MoveReminder *reminder)
 {
-    u32 v0;
-
-    for (v0 = 0; v0 < 13; v0++) {
-        Sprite_DeleteAndFreeResources(param0->unk_118[v0]);
+    for (u32 i = MOVE_REMINDER_SPRITE_0; i < MOVE_REMINDER_SPRITE_MAX; i++) {
+        Sprite_DeleteAndFreeResources(reminder->managedSprite[i]);
     }
 
-    SpriteSystem_FreeResourcesAndManager(param0->unk_110, param0->unk_114);
-    SpriteSystem_Free(param0->unk_110);
+    SpriteSystem_FreeResourcesAndManager(reminder->spriteSys, reminder->spriteMan);
+    SpriteSystem_Free(reminder->spriteSys);
 }
 
-static void ov91_021D20E8(UnkStruct_ov91_021D0ED8 *param0)
+static void MoveReminder_UpdateSpritesAnim(MoveReminder *reminder)
 {
-    u16 v0;
-
-    for (v0 = 0; v0 < 13; v0++) {
-        Sprite_UpdateAnim(param0->unk_118[v0]->sprite, FX32_ONE);
+    for (u16 i = MOVE_REMINDER_SPRITE_0; i < MOVE_REMINDER_SPRITE_MAX; i++) {
+        Sprite_UpdateAnim(reminder->managedSprite[i]->sprite, FX32_ONE);
     }
 }
 
-static void ov91_021D2110(UnkStruct_ov91_021D0ED8 *param0, NARC *param1)
+static void MoveReminder_LoadSpriteGraphics(MoveReminder *reminder, NARC *narc)
 {
-    u32 v0;
+    SpriteSystem_LoadCharResObjFromOpenNarc(reminder->spriteSys, reminder->spriteMan, narc, 5, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 47272);
+    SpriteSystem_LoadCharResObjFromOpenNarc(reminder->spriteSys, reminder->spriteMan, narc, 8, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 47273);
+    SpriteSystem_LoadCharResObjFromOpenNarc(reminder->spriteSys, reminder->spriteMan, narc, 2, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 47274);
 
-    SpriteSystem_LoadCharResObjFromOpenNarc(param0->unk_110, param0->unk_114, param1, 5, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 47272);
-    SpriteSystem_LoadCharResObjFromOpenNarc(param0->unk_110, param0->unk_114, param1, 8, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 47273);
-    SpriteSystem_LoadCharResObjFromOpenNarc(param0->unk_110, param0->unk_114, param1, 2, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 47274);
-
-    for (v0 = 47276; v0 <= 47282; v0++) {
-        sub_0207C948(param0->unk_110, param0->unk_114, NNS_G2D_VRAM_TYPE_2DMAIN, 0, v0);
+    for (u32 i = 47276; i <= 47282; i++) {
+        sub_0207C948(reminder->spriteSys, reminder->spriteMan, NNS_G2D_VRAM_TYPE_2DMAIN, 0, i);
     }
 
-    sub_0207CAC4(param0->unk_110, param0->unk_114, NNS_G2D_VRAM_TYPE_2DMAIN, 0, 47275);
-    SpriteSystem_LoadPlttResObjFromOpenNarc(param0->unk_110, param0->unk_114, param1, 9, FALSE, 2, NNS_G2D_VRAM_TYPE_2DMAIN, 47272);
-    sub_0207C97C(param0->unk_110, param0->unk_114, NNS_G2D_VRAM_TYPE_2DMAIN, 47273);
-    SpriteSystem_LoadCellResObjFromOpenNarc(param0->unk_110, param0->unk_114, param1, 4, FALSE, 47272);
-    SpriteSystem_LoadCellResObjFromOpenNarc(param0->unk_110, param0->unk_114, param1, 7, FALSE, 47273);
-    SpriteSystem_LoadCellResObjFromOpenNarc(param0->unk_110, param0->unk_114, param1, 1, FALSE, 47274);
-    SpriteSystem_LoadAnimResObjFromOpenNarc(param0->unk_110, param0->unk_114, param1, 3, FALSE, 47272);
-    SpriteSystem_LoadAnimResObjFromOpenNarc(param0->unk_110, param0->unk_114, param1, 6, FALSE, 47273);
-    SpriteSystem_LoadAnimResObjFromOpenNarc(param0->unk_110, param0->unk_114, param1, 0, FALSE, 47274);
-    sub_0207C9EC(param0->unk_110, param0->unk_114, 47275, 47275);
+    sub_0207CAC4(reminder->spriteSys, reminder->spriteMan, NNS_G2D_VRAM_TYPE_2DMAIN, 0, 47275);
+    SpriteSystem_LoadPlttResObjFromOpenNarc(reminder->spriteSys, reminder->spriteMan, narc, 9, FALSE, 2, NNS_G2D_VRAM_TYPE_2DMAIN, 47272);
+    sub_0207C97C(reminder->spriteSys, reminder->spriteMan, NNS_G2D_VRAM_TYPE_2DMAIN, 47273);
+    SpriteSystem_LoadCellResObjFromOpenNarc(reminder->spriteSys, reminder->spriteMan, narc, 4, FALSE, 47272);
+    SpriteSystem_LoadCellResObjFromOpenNarc(reminder->spriteSys, reminder->spriteMan, narc, 7, FALSE, 47273);
+    SpriteSystem_LoadCellResObjFromOpenNarc(reminder->spriteSys, reminder->spriteMan, narc, 1, FALSE, 47274);
+    SpriteSystem_LoadAnimResObjFromOpenNarc(reminder->spriteSys, reminder->spriteMan, narc, 3, FALSE, 47272);
+    SpriteSystem_LoadAnimResObjFromOpenNarc(reminder->spriteSys, reminder->spriteMan, narc, 6, FALSE, 47273);
+    SpriteSystem_LoadAnimResObjFromOpenNarc(reminder->spriteSys, reminder->spriteMan, narc, 0, FALSE, 47274);
+    sub_0207C9EC(reminder->spriteSys, reminder->spriteMan, 47275, 47275);
 }
 
-static void ov91_021D22A0(UnkStruct_ov91_021D0ED8 *param0, u16 param1, u16 param2)
+static void ov91_021D22A0(MoveReminder *reminder, u16 move, u16 idx)
 {
-    u32 v0;
+    u32 moveType;
 
-    if (param0->unk_00->unk_14 == 0) {
-        v0 = MoveTable_LoadParam(param1, MOVEATTRIBUTE_TYPE);
+    if (reminder->data->unk_14 == 0) {
+        moveType = MoveTable_LoadParam(move, MOVEATTRIBUTE_TYPE);
     } else {
-        v0 = MoveTable_LoadParam(param1, MOVEATTRIBUTE_CONTEST_TYPE) + 18;
+        moveType = MoveTable_LoadParam(move, MOVEATTRIBUTE_CONTEST_TYPE) + 18;
     }
 
-    SpriteSystem_ReplaceCharResObj(param0->unk_110, param0->unk_114, sub_0207C944(), sub_0207C908(v0), 1, 47276 + param2);
-    ManagedSprite_SetExplicitPalette(param0->unk_118[6 + param2], sub_0207C92C(v0) + 2);
+    SpriteSystem_ReplaceCharResObj(reminder->spriteSys, reminder->spriteMan, sub_0207C944(), sub_0207C908(moveType), TRUE, 47276 + idx);
+    ManagedSprite_SetExplicitPalette(reminder->managedSprite[MOVE_REMINDER_SPRITE_6 + idx], sub_0207C92C(moveType) + 2);
 }
 
-static void ov91_021D2314(UnkStruct_ov91_021D0ED8 *param0)
+static void MoveReminder_UpdateTypeSprites(MoveReminder *reminder)
 {
-    u32 v0;
+    for (u32 i = 0; i < MAX_ITEM_SHOWN; i++) {
+        ManagedSprite_SetPositionXY(reminder->managedSprite[MOVE_REMINDER_SPRITE_6 + i], 152, 32 + 16 * i);
 
-    for (v0 = 0; v0 < 7; v0++) {
-        ManagedSprite_SetPositionXY(
-            param0->unk_118[6 + v0], 152, 32 + 16 * v0);
-
-        if (param0->unk_00->unk_12 + v0 >= param0->unk_184 - 1) {
-            ManagedSprite_SetDrawFlag(param0->unk_118[6 + v0], 0);
+        if (reminder->data->listPos + i >= reminder->movesCount - 1) {
+            ManagedSprite_SetDrawFlag(reminder->managedSprite[MOVE_REMINDER_SPRITE_6 + i], FALSE);
         } else {
-            ManagedSprite_SetDrawFlag(param0->unk_118[6 + v0], 1);
-            ov91_021D22A0(param0, param0->unk_00->unk_0C[param0->unk_00->unk_12 + v0], v0);
+            ManagedSprite_SetDrawFlag(reminder->managedSprite[MOVE_REMINDER_SPRITE_6 + i], TRUE);
+            ov91_021D22A0(reminder, reminder->data->movesList[reminder->data->listPos + i], i);
         }
     }
 }
 
-static void ov91_021D237C(UnkStruct_ov91_021D0ED8 *param0, u16 param1, u16 param2)
+static void MoveReminder_MoveTypeSprites(MoveReminder *reminder, u16 prevPos, u16 currPos)
 {
-    u32 v0;
-    s16 v1, v2;
+    u32 i;
+    s16 x, y;
 
-    if (param1 < param2) {
-        for (v0 = 0; v0 < 7; v0++) {
-            ManagedSprite_GetPositionXY(param0->unk_118[6 + v0], &v1, &v2);
+    if (prevPos < currPos) {
+        for (i = 0; i < MAX_ITEM_SHOWN; i++) {
+            ManagedSprite_GetPositionXY(reminder->managedSprite[MOVE_REMINDER_SPRITE_6 + i], &x, &y);
 
-            if (v2 == 32) {
-                v2 = ((((((32 + 16) + 16) + 16) + 16) + 16) + 16);
+            if (y == 32) {
+                y = 32 + (16 * 6);
 
-                if (param0->unk_00->unk_0C[param2 + 6] != 0xffff) {
-                    ov91_021D22A0(param0, param0->unk_00->unk_0C[param2 + 6], v0);
+                if (reminder->data->movesList[currPos + 6] != (u16)-1) {
+                    ov91_021D22A0(reminder, reminder->data->movesList[currPos + 6], i);
                 }
             } else {
-                v2 -= 16;
+                y -= 16;
             }
 
-            ManagedSprite_SetPositionXY(param0->unk_118[6 + v0], v1, v2);
+            ManagedSprite_SetPositionXY(reminder->managedSprite[MOVE_REMINDER_SPRITE_6 + i], x, y);
         }
-    } else if (param1 > param2) {
-        for (v0 = 0; v0 < 7; v0++) {
-            ManagedSprite_GetPositionXY(param0->unk_118[6 + v0], &v1, &v2);
+    } else if (prevPos > currPos) {
+        for (i = 0; i < MAX_ITEM_SHOWN; i++) {
+            ManagedSprite_GetPositionXY(reminder->managedSprite[MOVE_REMINDER_SPRITE_6 + i], &x, &y);
 
-            if (v2 == ((((((32 + 16) + 16) + 16) + 16) + 16) + 16)) {
-                v2 = 32;
+            if (y == (32 + (16 * 6))) {
+                y = 32;
 
-                if (param0->unk_00->unk_0C[param2] != 0xffff) {
-                    ov91_021D22A0(param0, param0->unk_00->unk_0C[param2], v0);
+                if (reminder->data->movesList[currPos] != (u16)-1) {
+                    ov91_021D22A0(reminder, reminder->data->movesList[currPos], i);
                 }
             } else {
-                v2 += 16;
+                y += 16;
             }
 
-            ManagedSprite_SetPositionXY(param0->unk_118[6 + v0], v1, v2);
+            ManagedSprite_SetPositionXY(reminder->managedSprite[MOVE_REMINDER_SPRITE_6 + i], x, y);
         }
     } else {
         return;
     }
 
-    for (v0 = 0; v0 < 7; v0++) {
-        ManagedSprite_GetPositionXY(param0->unk_118[6 + v0], &v1, &v2);
-        v2 = (v2 - 32) / 16;
+    for (i = 0; i < MAX_ITEM_SHOWN; i++) {
+        ManagedSprite_GetPositionXY(reminder->managedSprite[MOVE_REMINDER_SPRITE_6 + i], &x, &y);
+        y = (y - 32) / 16;
 
-        if (param2 + v2 >= param0->unk_184 - 1) {
-            ManagedSprite_SetDrawFlag(param0->unk_118[6 + v0], 0);
+        if (currPos + y >= reminder->movesCount - 1) {
+            ManagedSprite_SetDrawFlag(reminder->managedSprite[MOVE_REMINDER_SPRITE_6 + i], FALSE);
         } else {
-            ManagedSprite_SetDrawFlag(param0->unk_118[6 + v0], 1);
+            ManagedSprite_SetDrawFlag(reminder->managedSprite[MOVE_REMINDER_SPRITE_6 + i], TRUE);
         }
     }
 }
 
-static void ov91_021D24B4(UnkStruct_ov91_021D0ED8 *param0, u16 param1)
+static void MoveReminder_UpdateClassSprite(MoveReminder *reminder, u16 move)
 {
-    u32 v0 = MoveTable_LoadParam(param1, MOVEATTRIBUTE_CLASS);
+    u32 moveClass = MoveTable_LoadParam(move, MOVEATTRIBUTE_CLASS);
 
-    SpriteSystem_ReplaceCharResObj(param0->unk_110, param0->unk_114, sub_0207CAC0(), sub_0207CA90(v0), 1, 47275);
-    ManagedSprite_SetExplicitPalette(param0->unk_118[5], sub_0207CAA8(v0) + 2);
+    SpriteSystem_ReplaceCharResObj(reminder->spriteSys, reminder->spriteMan, sub_0207CAC0(), sub_0207CA90(moveClass), TRUE, 47275);
+    ManagedSprite_SetExplicitPalette(reminder->managedSprite[MOVE_REMINDER_SPRITE_5], sub_0207CAA8(moveClass) + 2);
 }
 
-static void ov91_021D2508(UnkStruct_ov91_021D0ED8 *param0, NARC *param1)
+static void MoveReminder_LoadSprites(MoveReminder *reminder, NARC *narc)
 {
-    u32 v0;
+    ov91_021D2014(reminder);
+    MoveReminder_LoadSpriteGraphics(reminder, narc);
 
-    ov91_021D2014(param0);
-    ov91_021D2110(param0, param1);
-
-    for (v0 = 0; v0 < 13; v0++) {
-        param0->unk_118[v0] = SpriteSystem_NewSprite(param0->unk_110, param0->unk_114, &Unk_ov91_021D28FC[v0]);
+    for (u32 i = MOVE_REMINDER_SPRITE_0; i < MOVE_REMINDER_SPRITE_MAX; i++) {
+        reminder->managedSprite[i] = SpriteSystem_NewSprite(reminder->spriteSys, reminder->spriteMan, &sMoveReminder_SpriteTemplates[i]);
     }
 }
 
-static void ov91_021D2548(UnkStruct_ov91_021D0ED8 *param0, u8 param1, u8 param2)
+static void MoveReminder_UpdateCursor(MoveReminder *reminder, u8 index, u8 palette)
 {
-    ManagedSprite_SetPositionXY(param0->unk_118[4], 196, 32 + 16 * param1);
-    ManagedSprite_SetExplicitPalette(param0->unk_118[4], param2);
+    ManagedSprite_SetPositionXY(reminder->managedSprite[MOVE_REMINDER_SPRITE_CURSOR], 196, 32 + 16 * index);
+    ManagedSprite_SetExplicitPalette(reminder->managedSprite[MOVE_REMINDER_SPRITE_CURSOR], palette);
 }
 
-static void ov91_021D2574(UnkStruct_ov91_021D0ED8 *param0, u8 param1)
+static void ov91_021D2574(MoveReminder *reminder, u8 draw)
 {
-    ManagedSprite_SetDrawFlag(param0->unk_118[0], param1);
-    ManagedSprite_SetDrawFlag(param0->unk_118[1], param1);
+    ManagedSprite_SetDrawFlag(reminder->managedSprite[MOVE_REMINDER_SPRITE_0], draw);
+    ManagedSprite_SetDrawFlag(reminder->managedSprite[MOVE_REMINDER_SPRITE_1], draw);
 }
 
-static void ov91_021D2594(UnkStruct_ov91_021D0ED8 *param0)
+static void ov91_021D2594(MoveReminder *reminder)
 {
-    if (param0->unk_00->unk_12 != 0) {
-        ManagedSprite_SetDrawFlag(param0->unk_118[2], 1);
+    if (reminder->data->listPos != 0) {
+        ManagedSprite_SetDrawFlag(reminder->managedSprite[MOVE_REMINDER_SPRITE_2], TRUE);
     } else {
-        ManagedSprite_SetDrawFlag(param0->unk_118[2], 0);
+        ManagedSprite_SetDrawFlag(reminder->managedSprite[MOVE_REMINDER_SPRITE_2], FALSE);
     }
 
-    if (param0->unk_00->unk_12 + 7 < param0->unk_184) {
-        ManagedSprite_SetDrawFlag(param0->unk_118[3], 1);
+    if (reminder->data->listPos + 7 < reminder->movesCount) {
+        ManagedSprite_SetDrawFlag(reminder->managedSprite[MOVE_REMINDER_SPRITE_3], TRUE);
     } else {
-        ManagedSprite_SetDrawFlag(param0->unk_118[3], 0);
+        ManagedSprite_SetDrawFlag(reminder->managedSprite[MOVE_REMINDER_SPRITE_3], FALSE);
     }
 }
 
-static void ov91_021D25E4(UnkStruct_ov91_021D0ED8 *param0)
+static void ov91_021D25E4(MoveReminder *reminder)
 {
-    ManagedSprite_SetDrawFlag(param0->unk_118[2], 0);
-    ManagedSprite_SetDrawFlag(param0->unk_118[3], 0);
+    ManagedSprite_SetDrawFlag(reminder->managedSprite[MOVE_REMINDER_SPRITE_2], FALSE);
+    ManagedSprite_SetDrawFlag(reminder->managedSprite[MOVE_REMINDER_SPRITE_3], FALSE);
 }
 
-static int ov91_021D2604(UnkStruct_ov91_021D0ED8 *param0)
+static int MoveReminder_ScreenTransitionIn(MoveReminder *reminder)
 {
-    sub_0208C120(1, HEAP_ID_67);
-    param0->unk_180 = 11;
-    return 0;
+    sub_0208C120(1, HEAP_ID_MOVE_REMINDER);
+    reminder->state = 11;
+    return FALSE;
 }
 
-static int ov91_021D261C(UnkStruct_ov91_021D0ED8 *param0)
+static int MoveReminder_OpenSummaryScreenApp(MoveReminder *reminder)
 {
-    u8 v0[] = {
-        3, 5, 8
+    u8 pages[] = {
+        SUMMARY_PAGE_BATTLE_MOVES,
+        SUMMARY_PAGE_CONTEST_MOVES,
+        SUMMARY_PAGE_MAX
     };
 
-    ov91_021D0F6C(param0);
+    MoveReminder_Free(reminder);
 
-    param0->unk_14C.monData = param0->unk_00->unk_00;
-    param0->unk_14C.options = param0->unk_00->unk_08;
-    param0->unk_14C.dataType = SUMMARY_DATA_MON;
-    param0->unk_14C.monIndex = 0;
-    param0->unk_14C.monMax = 1;
-    param0->unk_14C.move = ov91_021D1DD0(param0);
-    param0->unk_14C.mode = SUMMARY_MODE_SELECT_MOVE;
-    param0->unk_14C.showContest = TRUE;
-    param0->unk_14C.chatotCry = NULL;
+    reminder->summaryScreen.monData = reminder->data->mon;
+    reminder->summaryScreen.options = reminder->data->options;
+    reminder->summaryScreen.dataType = SUMMARY_DATA_MON;
+    reminder->summaryScreen.monIndex = 0;
+    reminder->summaryScreen.monMax = 1;
+    reminder->summaryScreen.move = MoveReminder_SelectedMove(reminder);
+    reminder->summaryScreen.mode = SUMMARY_MODE_SELECT_MOVE;
+    reminder->summaryScreen.showContest = TRUE;
+    reminder->summaryScreen.chatotCry = NULL;
 
-    PokemonSummaryScreen_FlagVisiblePages(&param0->unk_14C, v0);
+    PokemonSummaryScreen_FlagVisiblePages(&reminder->summaryScreen, pages);
 
-    param0->unk_17C = OverlayManager_New(&gPokemonSummaryScreenApp, &param0->unk_14C, 67);
+    reminder->overlayMan = OverlayManager_New(&gPokemonSummaryScreenApp, &reminder->summaryScreen, HEAP_ID_MOVE_REMINDER);
     return 12;
 }
 
-static int ov91_021D26AC(UnkStruct_ov91_021D0ED8 *param0)
+static int MoveReminder_ReloadApp(MoveReminder *reminder)
 {
-    if (OverlayManager_Exec(param0->unk_17C)) {
-        OverlayManager_Free(param0->unk_17C);
-        ov91_021D0ED8(param0);
-        ov91_021D2548(param0, param0->unk_00->unk_10, 1);
-        ov91_021D2574(param0, 0);
-        ov91_021D25E4(param0);
-        param0->unk_00->unk_17 = param0->unk_14C.selectedMoveSlot;
-        param0->unk_180 = 7;
-        return 0;
+    if (OverlayManager_Exec(reminder->overlayMan)) {
+        OverlayManager_Free(reminder->overlayMan);
+        MoveReminder_LoadGraphics(reminder);
+        MoveReminder_UpdateCursor(reminder, reminder->data->cursorPos, 1);
+        ov91_021D2574(reminder, FALSE);
+        ov91_021D25E4(reminder);
+        reminder->data->moveSlot = reminder->summaryScreen.selectedMoveSlot;
+        reminder->state = 7;
+        return FALSE;
     }
 
     return 12;

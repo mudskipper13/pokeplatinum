@@ -19,7 +19,7 @@
 #include "unk_0203D1B8.h"
 #include "unk_020997B8.h"
 
-static void sub_0204EE90(ScriptContext *param0, u16 param1, Pokemon *param2, u16 *param3);
+static void sub_0204EE90(ScriptContext *ctx, u16 unused, Pokemon *mon, u16 *movesList);
 
 BOOL ScrCmd_SelectPartyMonMove(ScriptContext *ctx)
 {
@@ -68,21 +68,21 @@ BOOL ScrCmd_21F(ScriptContext *param0)
     return 0;
 }
 
-static void sub_0204EE90(ScriptContext *param0, u16 param1, Pokemon *param2, u16 *param3)
+static void sub_0204EE90(ScriptContext *ctx, u16 unused, Pokemon *mon, u16 *movesList)
 {
-    void **v0 = FieldSystem_GetScriptMemberPtr(param0->fieldSystem, 19);
-    UnkStruct_020997B8 *v1 = sub_020997B8(HEAP_ID_FIELD_TASK);
-    *v0 = v1;
+    void **v0 = FieldSystem_GetScriptMemberPtr(ctx->fieldSystem, 19);
+    MoveReminderData *data = sub_020997B8(HEAP_ID_FIELD_TASK);
+    *v0 = data;
 
-    v1->unk_00 = param2;
-    v1->unk_04 = SaveData_GetTrainerInfo(FieldSystem_GetSaveData(param0->fieldSystem));
-    v1->unk_08 = SaveData_GetOptions(param0->fieldSystem->saveData);
-    v1->unk_0C = param3;
-    v1->unk_15 = param1;
+    data->mon = mon;
+    data->trainerInfo = SaveData_GetTrainerInfo(FieldSystem_GetSaveData(ctx->fieldSystem));
+    data->options = SaveData_GetOptions(ctx->fieldSystem->saveData);
+    data->movesList = movesList;
+    data->unk_15 = unused;
 
-    sub_0203E284(param0->fieldSystem, v1);
-    ScriptContext_Pause(param0, ScriptContext_WaitForApplicationExit);
-    Heap_FreeToHeap(param3);
+    sub_0203E284(ctx->fieldSystem, data);
+    ScriptContext_Pause(ctx, ScriptContext_WaitForApplicationExit);
+    Heap_FreeToHeap(movesList);
 }
 
 BOOL ScrCmd_220(ScriptContext *param0)
@@ -129,42 +129,42 @@ BOOL ScrCmd_222(ScriptContext *param0)
 
 BOOL ScrCmd_223(ScriptContext *param0)
 {
-    UnkStruct_020997B8 *v0;
+    MoveReminderData *data;
     u16 *v1 = ScriptContext_GetVarPointer(param0);
     void **v2 = FieldSystem_GetScriptMemberPtr(param0->fieldSystem, 19);
 
-    v0 = *v2;
+    data = *v2;
 
     GF_ASSERT(*v2 != 0);
 
-    if ((v0->unk_16) == 0) {
+    if ((data->unk_16) == 0) {
         *v1 = 0;
     } else {
         *v1 = 0xff;
     }
 
-    sub_020997D0(v0);
+    sub_020997D0(data);
 
     return 0;
 }
 
 BOOL ScrCmd_225(ScriptContext *param0)
 {
-    UnkStruct_020997B8 *v0;
+    MoveReminderData *data;
     u16 *v1 = ScriptContext_GetVarPointer(param0);
     void **v2 = FieldSystem_GetScriptMemberPtr(param0->fieldSystem, 19);
 
-    v0 = *v2;
+    data = *v2;
 
     GF_ASSERT(*v2 != 0);
 
-    if ((v0->unk_16) == 0) {
+    if ((data->unk_16) == 0) {
         *v1 = 0;
     } else {
         *v1 = 0xff;
     }
 
-    sub_020997D0(v0);
+    sub_020997D0(data);
 
     return 0;
 }
